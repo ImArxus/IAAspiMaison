@@ -21,23 +21,23 @@ class Robot:
     def __str__(self):
         return 'Le robot est situé à l emplacement :  {self.posX} , {self.posY}'.format(self=self)
 
-    def moveLeft(self):
+    def move_left(self):
         if self.posX > 0:
             self.posX = self.posX-1
 
-    def moveRight(self):
+    def move_right(self):
         if self.posX < 4:
             self.posX = self.posX+1
 
-    def moveUp(self):
+    def move_up(self):
         if self.posY > 0:
             self.posY = self.posY-1
 
-    def moveDown(self):
+    def move_down(self):
         if self.posY < 4:
             self.posY = self.posY+1
 
-    def aStar(self, grid) -> Node:
+    def a_star(self, grid) -> Node:
         node_start = Node(grid.getCell(
             self.get_positionX(), self.get_positionY()))
         node_start.affect_heuristique(self)
