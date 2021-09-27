@@ -1,5 +1,5 @@
 from Robot import Robot
-from Tree import Node
+from Node import Node
 
 #Obtenir la position de l'aspirateur
 rbt = Robot(2,0)
