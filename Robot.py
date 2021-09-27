@@ -6,16 +6,16 @@ class Robot:
         self.posX = posX
         self.posY = posY
 
-    def get_positionX(self):
+    def get_posX(self):
         return self.posX
 
-    def get_positionY(self):
+    def get_posY(self):
         return self.posY
 
-    def set_positionX(self, X):
+    def set_posX(self, X):
         self.posX = X
 
-    def set_positionY(self, Y):
+    def set_posY(self, Y):
         self.posY = Y
 
     def __str__(self):
@@ -39,14 +39,14 @@ class Robot:
 
     def a_star(self, grid) -> Node:
         node_start = Node(grid.getCell(
-            self.get_positionX(), self.get_positionY()))
+            self.get_posX(), self.get_posY()))
         node_start.affect_heuristique(self)
         node_list = []
         node_list.append(node_start)
         while self.goal_reached(node_list[0]) == False:
             node_tmp = node_list[0]
             node_list.remove(node_list[0])
-            new_nodes = node_tmp.expand(self.get_belief(), self)
+            new_nodes = node_tmp.expand(self.get_expected_grid(), self)
             for node in new_nodes:
                 node_list.append(node)
             node_list.sort()

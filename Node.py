@@ -1,4 +1,15 @@
+from Cell import Cell
+
+
 class Node:
+
+    def __init__(self, actualCell, parent, action, depth, cost, heuristique):
+        self.actualCell = actualCell
+        self.parent = parent
+        self.action = action
+        self.depth = depth
+        self.cost = cost
+        self.heuristique = heuristique
 
     def __init__(self, data):
         self.data = data
@@ -30,8 +41,15 @@ class Node:
         successors = []
         actions = []
         for action in actions:
-            s = Node(self, self.position_after_action(action, grid), action,
-                     self.depth+1, self.cost_action(action)+self.parent.get_cost(), 0)
+            s = Node(self.position_after_action(action, grid), self, action,
+                     self.depth+1, self.parent.get_cost()+self.cost_action(action), 0)
             self.affect_heuristique(robot)
             successors.append(s)
         return successors
+
+    def position_after_action(self, action, grid):
+        cell_cloned = self.actualCell.clone()
+        if action == "up" and cell_cloned.get_posY() > 0:
+            cell_cloned = grid.get_cell(self.actualCell.get_posX(), self.actualCell.get_posY()+1).clones()
+            
+        return cell_cloned
