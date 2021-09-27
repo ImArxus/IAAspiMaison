@@ -8,16 +8,16 @@ class Node:
         self.right = None
 
     def __str__(self):
-        return str(self.data)
+        return '( {self.data} , up : {self.up}, down : {self.down}, left : {self.left}, right : {self.right})'.format(self=self)
 
     def insert(self, data, position):
-        if position is 'up':
+        if position == 'up':
             self.up = Node(data)
             self.up.parent = self
-        elif position is 'down':
+        elif position == 'down':
             self.down = Node(data)
             self.down.parent = self
-        elif position is 'left':
+        elif position == 'left':
             self.left = Node(data)
             self.left.parent = self
         else:
