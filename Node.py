@@ -30,8 +30,8 @@ class Node:
         successors = []
         actions = []
         for action in actions:
-            s = Node(self, self.make_action(action, grid), action,
-                     self.depth+1, self.cost_action(action)+self.parent.get_cost())
+            s = Node(self, self.position_after_action(action, grid), action,
+                     self.depth+1, self.cost_action(action)+self.parent.get_cost(), 0)
             self.affect_heuristique(robot)
             successors.append(s)
         return successors

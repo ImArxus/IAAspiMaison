@@ -1,9 +1,13 @@
 from Robot import Robot
 from Node import Node
+from Grid import Grid
+from Cell import Cell
 
 # Obtenir la position de l'aspirateur
 rbt = Robot(2, 0)
+grid = Grid(5, 4)
 print(rbt)
+print(grid)
 rbt.move_left()
 rbt.move_up()
 print(rbt)
