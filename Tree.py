@@ -2,24 +2,27 @@ class Node:
 
     def __init__(self, data):
         self.data = data
-        self.up = None
-        self.down = None
-        self.left = None
-        self.right = None
+        self.childUp = None
+        self.childDown = None
+        self.childLeft = None
+        self.childRight = None
+        self.parent = None
+        self.parentDirection = None
 
     def __str__(self):
-        return '( {self.data} , up : {self.up}, down : {self.down}, left : {self.left}, right : {self.right})'.format(self=self)
+        return '( {self.data} , up : {self.childUp}, down : {self.childDown}, left : {self.childLeft}, right : {self.childRight})'.format(self=self)
 
-    def insert(self, data, position):
+    def insert(self, node, position):
+        node.parent = self
         if position == 'up':
-            self.up = Node(data)
-            self.up.parent = self
+            self.childUp = node
+            self.parentDirection = 'up'
         elif position == 'down':
-            self.down = Node(data)
-            self.down.parent = self
+            self.childDown = node
+            self.parentDirection = 'down'
         elif position == 'left':
-            self.left = Node(data)
-            self.left.parent = self
+            self.childLeft = node
+            self.parentDirection = 'left'
         else:
-            self.right = Node(data)
-            self.right.parent = self  
+            self.childRight = node
+            self.parentDirection = 'right'

@@ -2,20 +2,30 @@ from Robot import Robot
 from Tree import Node
 
 #Obtenir la position de l'aspirateur
+print('Test robot : ')
 rbt = Robot(2,0)
 print(rbt)
 rbt.moveLeft()
 rbt.moveUp()
 print(rbt)
 #Créer un arbre de recherches et un stockage
+print('Test arbre : ')
 a= Node(5)
 print(a)
-a.insert(1,'up')
-a.insert(0,'left')
-a.insert(2,'down')
+b= Node(4)
+c= Node(3)
+d= Node(2)
+e= Node(1)
+f= Node(0)
+a.insert(b,'up')
+a.insert(c,'left')
+a.insert(d,'right')
 print(a)
-a.insert(0,'up')
+b.insert(e,'up')
 print(a)
+e.insert(f,'up')
+print(a)
+
 #Analyser l'état de la pièce actuelle
     #S'il y a de la poussière > aspirer
     #S'il y a un bijou > le ramasser
