@@ -2,12 +2,21 @@ from Robot import Robot
 from Node import Node
 from Grid import Grid
 from Cell import Cell
+import random
 
 # Obtenir la position de l'aspirateur
 print('Test robot : ')
 rbt = Robot(2, 0)
 grid = Grid(5, 4)
 print(rbt)
+print(grid)
+#Insertion poussière de manière aléatoire
+#print(random.randint(0, 4))
+rdm1:int = random.randint(0,4)
+rdm2:int = random.randint(0,4)
+print(rdm1,rdm2)
+dustcell: Cell = grid.get_cell(rdm1,rdm2)
+dustcell.set_dust(1)
 print(grid)
 rbt.move_left()
 rbt.move_up()
