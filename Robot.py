@@ -2,14 +2,14 @@ from Node import Node
 
 
 class Robot:
-    def __init__(self, posX, posY):
+    def __init__(self, posX, posY) -> None:
         self.posX = posX
         self.posY = posY
 
-    def get_posX(self):
+    def get_posX(self) -> int:
         return self.posX
 
-    def get_posY(self):
+    def get_posY(self) -> int:
         return self.posY
 
     def set_posX(self, X):
@@ -18,22 +18,22 @@ class Robot:
     def set_posY(self, Y):
         self.posY = Y
 
-    def __str__(self):
-        return 'Le robot est situé à l emplacement :  {self.posX} , {self.posY}'.format(self=self)
+    def __str__(self) -> str:
+        return "Le robot est situé à l'emplacement :  {self.posX} , {self.posY}".format(self=self)
 
-    def move_left(self):
+    def move_left(self) -> None:
         if self.posX > 0:
             self.posX = self.posX-1
 
-    def move_right(self):
+    def move_right(self) -> None:
         if self.posX < 4:
             self.posX = self.posX+1
 
-    def move_up(self):
+    def move_up(self) -> None:
         if self.posY > 0:
             self.posY = self.posY-1
 
-    def move_down(self):
+    def move_down(self) -> None:
         if self.posY < 4:
             self.posY = self.posY+1
 
