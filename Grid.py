@@ -3,7 +3,7 @@ from Cell import Cell
 
 class Grid:
 
-    def __init__(self, rows, cols) -> None:
+    def __init__(self, cols, rows) -> None:
         self.rows = rows
         self.cols = cols
         self.grid = [[Cell(0, 0, i, j) for i in range(cols)]
@@ -17,11 +17,11 @@ class Grid:
             result += "\n"
         return result
 
-    def get_cell(self, posX, posY):
+    def get_cell(self, posX, posY) -> Cell:
         return self.grid[posX][posY]
 
-    def get_rows(self):
+    def get_rows(self) -> int:
         return self.rows
     
-    def get_cols(self):
+    def get_cols(self) -> int:
         return self.cols

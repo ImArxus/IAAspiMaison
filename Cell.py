@@ -9,26 +9,29 @@ class Cell:
     def __str__(self) -> str:
         return "[" + str(self.dust) + "/" + str(self.jewel) + "]"
 
-    def get_dust(self):
+    def get_dust(self) -> int:
         return self.dust
-    
-    def get_jewel(self):
+
+    def get_jewel(self) -> int:
         return self.jewel
 
-    def get_posX(self):
+    def get_posX(self) -> int:
         return self.posX
 
-    def get_posY(self):
+    def get_posY(self) -> int:
         return self.posY
 
-    def set_posX(self, posX):
+    def set_posX(self, posX) -> None:
         self.posX = posX
 
-    def set_posY(self, posY):
+    def set_posY(self, posY) -> None:
         self.posY = posY
 
-    def set_dust(self, dust):
+    def set_dust(self, dust) -> None:
         self.dust = dust
 
-    def set_jewel(self, jewel):
+    def set_jewel(self, jewel) -> None:
         self.jewel = jewel
+
+    def clone(self):
+        return Cell(self.get_dust(), self.get_jewel(), self.get_posX(), self.get_posY())
