@@ -16,26 +16,26 @@ def main():
    n = 5
    cases = [] 
 
-   ##----- Création de la fenêtre -----##
+   ##----- Creation de la fenetre -----##
    fen = Tk()
    fen.title('IAAspiMaison')
 
 
 
-   ##----- Création des boutons -----##
+   ##----- Creation des boutons -----##
    bouton_quitter = Button(fen, text='Quitter', command=fen.destroy)
    bouton_quitter.grid(row = 1, column = 1, sticky=W+E, padx=3, pady=3)
 
-   ##----- Création des canevas -----##
+   ##----- Creation des canevas -----##
    dessin = Canvas(fen, width= n*c+2, height = n*c+2)
    dessin.grid(row = 0, column = 0, columnspan=2, padx=3, pady=3)
 
-   ##----- Création des figures -----##
-   for ligne in range(n):          # Les cases de chaque ligne seront stockées dans "pieces"
+   ##----- Creation des figures -----##
+   for ligne in range(n):          # Les cases de chaque ligne seront stockees dans "pieces"
         pieces=[]
         for colonne in range(n):    # Conception des pieces d'une ligne
             pieces.append(dessin.create_rectangle(colonne*c, ligne*c, (colonne+1)*c, (ligne+1)*c))
-        cases.append(pieces)       # Ajout de la ligne à la liste principale
+        cases.append(pieces)       # Ajout de la ligne a la liste principale
 
     ##----- Modification des figures creees -----##
    for ligne in range(n):
