@@ -33,6 +33,12 @@ class Cell:
     def set_jewel(self, jewel):
         self.jewel = jewel
 
+
+
+
+    def clone(self) -> Cell:
+        return Cell(self.get_dust(), self.get_jewel(), self.get_posX(), self.get_posY())
+
     def distance(self, cellPosX,
                  cellPosY):  ##----- Fonction qui indique la distance d'une cellule dont on lui fournit les coordonnées jusqu'a elle même -----#
         distX = self.posX - cellPosX
