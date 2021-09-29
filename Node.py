@@ -1,55 +1,99 @@
+from __future__ import annotations
 from Cell import Cell
+from Grid import Grid
 
 
 class Node:
 
-    def __init__(self, actualCell, parent, action, depth, cost, heuristique):
-        self.actualCell = actualCell
+    def __init__(self, actual_cell: Cell, parent: Node, action: str, depth: int, energy_cost: int, heuristique: int) -> None:
+        self.actual_cell = actual_cell
         self.parent = parent
         self.action = action
         self.depth = depth
-        self.cost = cost
+        self.energy_cost = self.set_energy_cost(energy_cost)
         self.heuristique = heuristique
 
-    def __init__(self, data):
-        self.data = data
-        self.up = None
-        self.down = None
-        self.left = None
-        self.right = None
-        self.depth = 0
-        self.parent = None
+    def get_actual_cell(self) -> Cell:
+        return self.actual_cell
 
-    def __str__(self):
-        return '( {self.data} , up : {self.up}, down : {self.down}, left : {self.left}, right : {self.right})'.format(self=self)
+    def get_parent(self) -> Node:
+        return self.parent
 
-    def insert(self, data, position):
-        if position == 'up':
-            self.up = Node(data)
-            self.up.parent = self
-        elif position == 'down':
-            self.down = Node(data)
-            self.down.parent = self
-        elif position == 'left':
-            self.left = Node(data)
-            self.left.parent = self
-        else:
-            self.right = Node(data)
-            self.right.parent = self
+    def get_action(self) -> str:
+        return self.action
 
-    def expand(self, grid, robot):
-        successors = []
-        actions = []
+    def get_depth(self) -> int:
+        return self.depth
+
+    def get_energy_cost(self) -> int:
+        return self.energy_cost
+
+    def get_heuristique(self) -> int:
+        return self.heuristique
+
+    def set_actual_cell(self, actual_cell: Cell) -> None:
+        self.actual_cell = actual_cell
+
+    def set_parent(self, parent: Node) -> None:
+        self.parent = parent
+
+    def set_action(self, action: str) -> None:
+        self.action = action
+
+    def set_depth(self, depth: int) -> None:
+        self.depth = depth
+
+    def set_energy_cost(self, energy_cost: int) -> None:
+        self.energy_cost = energy_cost
+    
+    def set_heuristique(self, heuristique: int) -> None:
+        self.heuristique = heuristique
+
+    def __str__(self) -> str:
+        return "Actual cell : " + self.actualCell.__str__()
+
+    def expand(self, grid: Grid, robot) -> list:
+        successors: list[Node] = []
+        actions = self.possible_actions(grid)
         for action in actions:
-            s = Node(self.position_after_action(action, grid), self, action,
-                     self.depth+1, self.parent.get_cost()+self.cost_action(action), 0)
+            s = Node(self.position_after_action(action, grid), self,
+                     action, self.depth+1, self.parent.get_energy_cost()+1, 0)  # Ajoute 1 de profondeur et 1 au coût énergétique global pour chaque action effectuée
             self.affect_heuristique(robot)
             successors.append(s)
         return successors
 
-    def position_after_action(self, action, grid):
+    def position_after_action(self, action: str, grid: Grid) -> Cell:
         cell_cloned = self.actualCell.clone()
-        if action == "up" and cell_cloned.get_posY() > 0:
-            cell_cloned = grid.get_cell(self.actualCell.get_posX(), self.actualCell.get_posY()+1).clones()
-            
+        if action == "grab":
+            cell_cloned.set_jewel(0)
+        elif action == "clean":
+            cell_cloned.set_dust(0)
+        elif action == "up" and cell_cloned.get_posY() > 0:
+            cell_cloned = grid.get_cell(
+                self.actualCell.get_posX(), self.actualCell.get_posY()-1).clone()
+        elif action == "down" and cell_cloned.get_posY() < grid.get_rows():
+            cell_cloned = grid.get_cell(
+                self.actualCell.get_posX(), self.actualCell.get_posY()+1).clone()
+        elif action == "left" and cell_cloned.get_posX() > 0:
+            cell_cloned = grid.get_cell(
+                self.actualCell.get_posX()-1, self.actualCell.get_posY()).clone()
+        elif action == "down" and cell_cloned.get_posX() < grid.get_cols():
+            cell_cloned = grid.get_cell(
+                self.actualCell.get_posX()+1, self.actualCell.get_posY()).clone()
         return cell_cloned
+
+    def possible_actions(self, grid: Grid) -> list[str]:
+        actions = []
+        if self.actualCell.get_dust() > 0:
+            actions.append("clean")
+        if self.actualCell.get_jewel() > 0:
+            actions.append("grab")
+        if self.actualCell.get_posX() < grid.get_cols():
+            actions.append("right")
+        if self.actualCell.get_posX() > 0:
+            actions.append("left")
+        if self.actualCell.get_posY() < grid.get_rows():
+            actions.append("down")
+        if self.actualCell.get_posY() > 0:
+            actions.append("up")
+        return actions
