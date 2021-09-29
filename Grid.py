@@ -18,7 +18,7 @@ class Grid:
         return result
 
     def get_cell(self, posX, posY) -> Cell:
-        return self.grid[posX][posY]
+        return self.grid[posY][posX]
 
     def get_rows(self) -> int:
         return self.rows

@@ -1,12 +1,12 @@
 from Robot import Robot
-from Node import Node
+from Tree import Node
 from Grid import Grid
 from Cell import Cell
 import random
 
 # Création du robot et de la grille
-rbt = Robot(0, 0)
-grid = Grid(5, 5)
+rbt = Robot(0, 1)
+grid = Grid(2, 2)
 
 #Insertion de poussière de manière aléatoire
 rdm1:int = random.randint(0,grid.get_cols()-1)
@@ -21,45 +21,77 @@ currentX = rbt.posX
 currentY = rbt.posY
 currentPos = currentX, currentY
 tree = Node(currentPos)
-print(tree)
 
 #Fonction d'analyse d'une pièce
-def analyseCell(grid,posX,posY):
-    if grid.get_cell(posX,posY).get_dust() == 1:
-        print("Dust in cell ")
-        print(posX, posY)
-    elif grid.get_cell(posX,posY).get_jewel() == 1:
-        print("Jewel in cell ")
-        print(posX, posY)
-    else:
-        print("Nothing in cell ")
-        print(posX, posY)
+def analyseCell(gr,X,Y)-> Cell:
+    cell:Cell=None
+    if gr.get_cell(X,Y).get_dust() == 1:
+        cell=gr.get_cell(X,Y)
+    elif gr.get_cell(X,Y).get_jewel() == 1:
+        cell=gr.get_cell(X,Y)
+    return cell
+
+#Fonction d'analyse des cellules juxtaposées
+def recursiveAnalyse(X,Y,boolean)->Cell:
+    cellToReturn:Cell=None
+    if Y>0:
+        newPos = X, Y-1
+        newNode : Node =  Node(newPos)
+        tree.insert(newNode,'up')
+        testR=analyseCell(grid,X, Y-1)
+        if(testR!=None):
+            cellToReturn=testR
+            boolean=False
+    if  (Y<grid.get_rows()-1) & (boolean):
+        newPos = X, Y+1
+        newNode : Node =  Node(newPos)
+        tree.insert(newNode,'down')
+        testR=analyseCell(grid,X, Y+1)
+        if(testR!=None):
+            cellToReturn=testR
+            boolean=False
+    if  (X>0) & (boolean):
+        newPos = X-1, Y
+        newNode : Node =  Node(newPos)
+        tree.insert(newNode,'left')
+        testR= analyseCell(grid,X-1, Y)
+        if(testR!=None):
+            cellToReturn=testR
+            boolean=False
+    if  (X<grid.get_cols()-1) & (boolean):
+        newPos = X+1, Y
+        newNode : Node =  Node(newPos)
+        tree.insert(newNode,'right')
+        testR=analyseCell(grid,X+1, Y)
+        if(testR!=None):
+            cellToReturn=testR
+    return cellToReturn
 
 # Analyse de l'état de la pièce actuelle
-analyseCell(grid,currentX,currentY)
+test=analyseCell(grid,currentX,currentY)
+if(test!=None):
+    print("position de la case trouvée: ")
+    print(test.get_posX(), test.get_posY())
+    if(test.get_dust()==1):
+        print("Contient de la saleté")
+    else:
+        print("Contient des bijoux")
+else:
+    test2=recursiveAnalyse(currentX,currentY,True)
+    if(test2!=None):
+        print("position de la case trouvée: ")
+        print(test2.get_posX(), test2.get_posY())
+        if(test2.get_dust()==1):
+            print("Contient de la saleté")
+        else:
+            print("Contient des bijoux")
+    print("")
+print("Arbre de recherche : ")
+print(tree)
 
 # Sinon récursivité :
 # Chercher les pièces juxtaposées jamais explorées et en créer des noeuds à ajouter à l'arbre et au stockage
-if  currentY>0:
-    newPos = currentX, currentY-1
-    tree.insert(newPos,'up')
-    print(tree)
-    analyseCell(grid,currentX, currentY-1)
-if  currentY<4:
-    newPos = currentX, currentY+1
-    tree.insert(newPos,'down')
-    print(tree)
-    analyseCell(grid,currentX, currentY+1)
-if  currentX>0:
-    newPos = currentX-1, currentY
-    tree.insert(newPos,'left')
-    print(tree)
-    analyseCell(grid,currentX-1, currentY)
-if  currentY<4:
-    newPos = currentX+1, currentY
-    tree.insert(newPos,'right')
-    print(tree)
-    analyseCell(grid,currentX+1, currentY)
+
 
 # Répéter jusqu'à trouver une pièce sale puis retourner l'arbre créé
 # En utilisant l'arbre déplacer le robot puis aspirer ou ramasser
