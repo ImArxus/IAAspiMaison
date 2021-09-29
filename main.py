@@ -4,17 +4,22 @@ from Grid import Grid
 from Cell import Cell
 
 # Obtenir la position de l'aspirateur
-rbt = Robot(2, 0)
 grid = Grid(5, 4)
-cell = Cell(0, 0, 2, 4)
-grid.get_cell(cell.get_posX(), cell.get_posY()).set_dust(1)
-node = Node(cell, None, None, 0, 0, 0)
+rbt = Robot(2, 0, grid)
+cell1 = Cell(1, 0, 0, 2)
+cell2 = Cell(0, 0, 4, 0)
+grid.get_cell(cell1.get_posX(), cell1.get_posY()).set_dust(0)
+grid.get_cell(cell2.get_posX(), cell2.get_posY()).set_jewel(1)
+node = Node(cell1, None, None, 0, 0, 0)
 print(rbt)
 print(grid)
 rbt.move_left()
 rbt.move_up()
 print(rbt)
 # Créer un arbre de recherches et un stockage
+print(node)
+print(node.possible_actions(grid))
+print(node.position_after_action("down", grid))
 print(node)
 """node.insert(1, 'up')
 node.insert(0, 'left')

@@ -13,7 +13,7 @@ class Grid:
         result = ""
         for r in self.grid:
             for c in r:
-                result += c.__str__()
+                result += "|" + c.__str__() + "|"
             result += "\n"
         return result
 

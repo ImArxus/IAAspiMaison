@@ -10,7 +10,7 @@ class Cell:
         self.posY = posY
 
     def __str__(self) -> str:
-        return "[" + str(self.dust) + "/" + str(self.jewel) + "]"
+        return "[" + str(self.dust) + "/" + str(self.jewel) + "] in (" + str(self.get_posX()) + "/" + str(self.get_posY()) + ")"
 
     def get_dust(self) -> int:
         return self.dust

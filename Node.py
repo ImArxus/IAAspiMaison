@@ -1,7 +1,6 @@
+from __future__ import annotations
 from Cell import Cell
 from Grid import Grid
-from Robot import Robot
-from Node import Node
 
 
 class Node:
@@ -17,8 +16,8 @@ class Node:
     def __str__(self) -> str:
         return "Actual cell : " + self.actualCell.__str__()
 
-    def expand(self, grid: Grid, robot: Robot) -> list:
-        successors = []
+    def expand(self, grid: Grid, robot) -> list:
+        successors: list[Node] = []
         actions = self.possible_actions(grid)
         for action in actions:
             s = Node(self.position_after_action(action, grid), self, action,
@@ -62,3 +61,5 @@ class Node:
         if self.actualCell.get_posY() > 0:
             actions.append("up")
         return actions
+
+    
