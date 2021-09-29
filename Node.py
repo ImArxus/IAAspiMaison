@@ -1,9 +1,12 @@
 from Cell import Cell
+from Grid import Grid
+from Robot import Robot
+from Node import Node
 
 
 class Node:
 
-    def __init__(self, actualCell, parent, action, depth, cost, heuristique) -> None:
+    def __init__(self, actualCell: Cell, parent: Node, action: str, depth: int, cost: int, heuristique: int) -> None:
         self.actualCell = actualCell
         self.parent = parent
         self.action = action
@@ -14,7 +17,7 @@ class Node:
     def __str__(self) -> str:
         return "Actual cell : " + self.actualCell.__str__()
 
-    def expand(self, grid, robot) -> list:
+    def expand(self, grid: Grid, robot: Robot) -> list:
         successors = []
         actions = self.possible_actions(grid)
         for action in actions:
@@ -24,7 +27,7 @@ class Node:
             successors.append(s)
         return successors
 
-    def position_after_action(self, action, grid) -> Cell:
+    def position_after_action(self, action: str, grid: Grid) -> Cell:
         cell_cloned = self.actualCell.clone()
         if action == "grab":
             cell_cloned.set_jewel(0)
@@ -44,7 +47,7 @@ class Node:
                 self.actualCell.get_posX()+1, self.actualCell.get_posY()).clone()
         return cell_cloned
 
-    def possible_actions(self, grid) -> list[str]:
+    def possible_actions(self, grid: Grid) -> list[str]:
         actions = []
         if self.actualCell.get_dust() > 0:
             actions.append("clean")

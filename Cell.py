@@ -1,6 +1,9 @@
+from __future__ import annotations
+
+
 class Cell:
 
-    def __init__(self, dust, jewel, posX, posY) -> None:
+    def __init__(self, dust: int, jewel: int, posX: int, posY: int) -> None:
         self.dust = dust
         self.jewel = jewel
         self.posX = posX
@@ -21,17 +24,17 @@ class Cell:
     def get_posY(self) -> int:
         return self.posY
 
-    def set_posX(self, posX) -> None:
+    def set_posX(self, posX: int) -> None:
         self.posX = posX
 
-    def set_posY(self, posY) -> None:
+    def set_posY(self, posY: int) -> None:
         self.posY = posY
 
-    def set_dust(self, dust) -> None:
+    def set_dust(self, dust: int) -> None:
         self.dust = dust
 
-    def set_jewel(self, jewel) -> None:
+    def set_jewel(self, jewel: int) -> None:
         self.jewel = jewel
 
-    def clone(self):
+    def clone(self) -> Cell:
         return Cell(self.get_dust(), self.get_jewel(), self.get_posX(), self.get_posY())

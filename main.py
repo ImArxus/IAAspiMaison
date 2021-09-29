@@ -6,7 +6,8 @@ from Cell import Cell
 # Obtenir la position de l'aspirateur
 rbt = Robot(2, 0)
 grid = Grid(5, 4)
-cell = Cell(0, 0, 0, 1)
+cell = Cell(0, 0, 2, 4)
+grid.get_cell(cell.get_posX(), cell.get_posY()).set_dust(1)
 node = Node(cell, None, None, 0, 0, 0)
 print(rbt)
 print(grid)
