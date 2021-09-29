@@ -1,64 +1,31 @@
-import sys
-from tkinter import *
-import AlgoNonInforme
-import Cell
-import Grid
-import Node
-import Robot
+from Robot import Robot
+from Node import Node
+from Grid import Grid
+from Cell import Cell
 
-
- 
-
-
-
-def main():
-   c = 40     
-   n = 5
-   cases = [] 
-
-   ##----- Creation de la fenetre -----##
-   fen = Tk()
-   fen.title('IAAspiMaison')
-
-
-
-   ##----- Creation des boutons -----##
-   bouton_quitter = Button(fen, text='Quitter', command=fen.destroy)
-   bouton_quitter.grid(row = 1, column = 1, sticky=W+E, padx=3, pady=3)
-
-   ##----- Creation des canevas -----##
-   dessin = Canvas(fen, width= n*c+2, height = n*c+2)
-   dessin.grid(row = 0, column = 0, columnspan=2, padx=3, pady=3)
-
-   ##----- Creation des figures -----##
-   for ligne in range(n):          # Les cases de chaque ligne seront stockees dans "pieces"
-        pieces=[]
-        for colonne in range(n):    # Conception des pieces d'une ligne
-            pieces.append(dessin.create_rectangle(colonne*c, ligne*c, (colonne+1)*c, (ligne+1)*c))
-        cases.append(pieces)       # Ajout de la ligne a la liste principale
-
-    ##----- Modification des figures creees -----##
-   for ligne in range(n):
-        for colonne in range(n):
-            if (ligne+colonne)%2 == 0:      # Parite
-                dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='black' )
-            else:
-                dessin.itemconfigure(cases[ligne][colonne], outline='white')
-
-   fen.mainloop() 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == '__main__':
-    main()
+# Obtenir la position de l'aspirateur
+rbt = Robot(2, 0)
+grid = Grid(5, 4)
+cell = Cell(0, 0, 0, 1)
+node = Node(cell, None, None, 0, 0, 0)
+print(rbt)
+print(grid)
+rbt.move_left()
+rbt.move_up()
+print(rbt)
+# Créer un arbre de recherches et un stockage
+print(node)
+"""node.insert(1, 'up')
+node.insert(0, 'left')
+node.insert(2, 'down')
+print(node)
+node.insert(0, 'up')
+print(node)"""
+# Analyser l'état de la pièce actuelle
+# S'il y a de la poussière > aspirer
+# S'il y a un bijou > le ramasser
+# Sinon récursivité :
+# Chercher les pièces juxtaposées jamais explorées et en créer des noeuds à ajouter à l'arbre et au stockage
+# Répéter jusqu'à trouver une pièce sale puis retourner l'arbre créé
+# En utilisant l'arbre déplacer le robot puis aspirer ou ramasser
+# Répéter
