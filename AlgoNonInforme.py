@@ -2,11 +2,12 @@ from Robot import Robot
 from Tree import Node
 from Grid import Grid
 from Cell import Cell
+from Position import Position
 import random
 
 # Création du robot et de la grille
 rbt = Robot(0, 1)
-grid = Grid(2, 2)
+grid = Grid(3,3)
 
 #Insertion de poussière de manière aléatoire
 rdm1:int = random.randint(0,grid.get_cols()-1)
@@ -16,83 +17,105 @@ dustcell.set_dust(1)
 print(grid)
 print(rbt)
 
-#Création d'un arbre de recherches et d'un stockage
-currentX = rbt.posX
-currentY = rbt.posY
-currentPos = currentX, currentY
-tree = Node(currentPos)
-
 #Fonction d'analyse d'une pièce
-def analyseCell(gr,X,Y)-> Cell:
+def analyseCell(gr,pos:Position)-> Cell:
     cell:Cell=None
-    if gr.get_cell(X,Y).get_dust() == 1:
-        cell=gr.get_cell(X,Y)
-    elif gr.get_cell(X,Y).get_jewel() == 1:
-        cell=gr.get_cell(X,Y)
+    if gr.get_cell(pos.get_posX(),pos.get_posY()).get_dust() == 1:
+        cell=gr.get_cell(pos.get_posX(),pos.get_posY())
+    elif gr.get_cell(pos.get_posX(),pos.get_posY()).get_jewel() == 1:
+        cell=gr.get_cell(pos.get_posX(),pos.get_posY())
     return cell
 
-#Fonction d'analyse des cellules juxtaposées
-def recursiveAnalyse(X,Y,boolean)->Cell:
-    cellToReturn:Cell=None
-    if Y>0:
-        newPos = X, Y-1
+#Fonction d'analyse des cellules juxtaposées 
+def recursiveAnalyse(pos:Position,boolean)->Cell:
+    nodeLaps = []
+    newPos = Position(pos.get_posX(), pos.get_posY()-1)
+    if (pos.get_posY()>0)&~(nodeStudied.__contains__(newPos.get_pos())) & (~boolean):
+        nodeStudied.append(newPos.get_pos())
+        nodeLaps.append(newPos.get_pos())
         newNode : Node =  Node(newPos)
         tree.insert(newNode,'up')
-        testR=analyseCell(grid,X, Y-1)
+        posR = Position(pos.get_posX(), pos.get_posY()-1)
+        testR=analyseCell(grid,posR)
         if(testR!=None):
-            cellToReturn=testR
-            boolean=False
-    if  (Y<grid.get_rows()-1) & (boolean):
-        newPos = X, Y+1
+            boolean=True
+            return testR
+        else:
+            return recursiveAnalyse(posR,boolean)
+
+    newPos = Position(pos.get_posX(), pos.get_posY()+1)
+    if  (pos.get_posY()<grid.get_rows()-1) & (~boolean)&~(nodeStudied.__contains__(newPos.get_pos())):
+        nodeStudied.append(newPos.get_pos())
+        nodeLaps.append(newPos.get_pos())
         newNode : Node =  Node(newPos)
         tree.insert(newNode,'down')
-        testR=analyseCell(grid,X, Y+1)
+        posR = Position(pos.get_posX(), pos.get_posY()+1)
+        testR=analyseCell(grid,posR)
         if(testR!=None):
-            cellToReturn=testR
-            boolean=False
-    if  (X>0) & (boolean):
-        newPos = X-1, Y
+            boolean=True
+            return testR
+        else:
+            return recursiveAnalyse(posR,boolean)
+
+    newPos = Position(pos.get_posX()-1, pos.get_posY())
+    if  (pos.get_posX()>0) & (~boolean)&~(nodeStudied.__contains__(newPos.get_pos())):
+        nodeStudied.append(newPos.get_pos())
+        nodeLaps.append(newPos.get_pos())
         newNode : Node =  Node(newPos)
         tree.insert(newNode,'left')
-        testR= analyseCell(grid,X-1, Y)
+        posR = Position(pos.get_posX()-1, pos.get_posX())
+        testR=analyseCell(grid,posR)
         if(testR!=None):
-            cellToReturn=testR
-            boolean=False
-    if  (X<grid.get_cols()-1) & (boolean):
-        newPos = X+1, Y
+            boolean=True
+            return testR
+        else:
+            return recursiveAnalyse(posR,boolean)
+
+    newPos = Position(pos.get_posX()+1, pos.get_posY())
+    if  (pos.get_posX()<grid.get_cols()-1) & (~boolean)&~(nodeStudied.__contains__(newPos.get_pos())):
+        nodeStudied.append(newPos.get_pos())
+        nodeLaps.append(newPos.get_pos())
         newNode : Node =  Node(newPos)
         tree.insert(newNode,'right')
-        testR=analyseCell(grid,X+1, Y)
+        posR = Position(pos.get_posX()+1, pos.get_posY())
+        testR=analyseCell(grid,posR)
         if(testR!=None):
-            cellToReturn=testR
-    return cellToReturn
+            boolean=True
+            return testR
+        else:
+            return recursiveAnalyse(posR,boolean)
+    return None
+    """while ~boolean:
+        element=nodeLaps[0]
+        posRec = Position(int(element[0]),int(element[1]))
+        cellRec:Cell=recursiveAnalyse(posRec,boolean)
+        del nodeLaps[0]
+        if cellRec!=None:
+            boolean=True"""
 
-# Analyse de l'état de la pièce actuelle
-test=analyseCell(grid,currentX,currentY)
-if(test!=None):
-    print("position de la case trouvée: ")
-    print(test.get_posX(), test.get_posY())
-    if(test.get_dust()==1):
+#Création d'un arbre de recherches et d'un stockage + algo
+currentPos = Position(rbt.posX,rbt.posY)
+tree = Node(currentPos)
+nodeStudied = []
+found:bool = False
+
+res=analyseCell(grid,currentPos)
+nodeStudied.append(currentPos.get_pos())
+if(res!=None):
+    found=True
+else:
+    res=recursiveAnalyse(currentPos,found)
+if(res!=None):
+    print("Position de la case trouvée: ")
+    print(res.get_posX(), res.get_posY())
+    if(res.get_dust()==1):
         print("Contient de la saleté")
     else:
         print("Contient des bijoux")
-else:
-    test2=recursiveAnalyse(currentX,currentY,True)
-    if(test2!=None):
-        print("position de la case trouvée: ")
-        print(test2.get_posX(), test2.get_posY())
-        if(test2.get_dust()==1):
-            print("Contient de la saleté")
-        else:
-            print("Contient des bijoux")
-    print("")
+print("")
 print("Arbre de recherche : ")
 print(tree)
-
-# Sinon récursivité :
-# Chercher les pièces juxtaposées jamais explorées et en créer des noeuds à ajouter à l'arbre et au stockage
-
-
-# Répéter jusqu'à trouver une pièce sale puis retourner l'arbre créé
-# En utilisant l'arbre déplacer le robot puis aspirer ou ramasser
-# Répéter
+print("")
+print("Noeuds étudiés : ")
+for element in nodeStudied:
+            print(element)
