@@ -1,9 +1,11 @@
+from __future__ import annotations
 from Cell import Cell
+from Grid import Grid
 
 
 class Node:
 
-    def __init__(self, actualCell, parent, action, depth, cost, heuristique) -> None:
+    def __init__(self, actualCell: Cell, parent: Node, action: str, depth: int, cost: int, heuristique: int) -> None:
         self.actualCell = actualCell
         self.parent = parent
         self.action = action
@@ -14,8 +16,8 @@ class Node:
     def __str__(self) -> str:
         return "Actual cell : " + self.actualCell.__str__()
 
-    def expand(self, grid, robot) -> list:
-        successors = []
+    def expand(self, grid: Grid, robot) -> list:
+        successors: list[Node] = []
         actions = self.possible_actions(grid)
         for action in actions:
             s = Node(self.position_after_action(action, grid), self, action,
@@ -24,7 +26,7 @@ class Node:
             successors.append(s)
         return successors
 
-    def position_after_action(self, action, grid) -> Cell:
+    def position_after_action(self, action: str, grid: Grid) -> Cell:
         cell_cloned = self.actualCell.clone()
         if action == "grab":
             cell_cloned.set_jewel(0)
@@ -44,7 +46,7 @@ class Node:
                 self.actualCell.get_posX()+1, self.actualCell.get_posY()).clone()
         return cell_cloned
 
-    def possible_actions(self, grid) -> list[str]:
+    def possible_actions(self, grid: Grid) -> list[str]:
         actions = []
         if self.actualCell.get_dust() > 0:
             actions.append("clean")
@@ -59,3 +61,5 @@ class Node:
         if self.actualCell.get_posY() > 0:
             actions.append("up")
         return actions
+
+    
