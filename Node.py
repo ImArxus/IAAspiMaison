@@ -5,12 +5,48 @@ from Grid import Grid
 
 class Node:
 
-    def __init__(self, actualCell: Cell, parent: Node, action: str, depth: int, cost: int, heuristique: int) -> None:
-        self.actualCell = actualCell
+    def __init__(self, actual_cell: Cell, parent: Node, action: str, depth: int, energy_cost: int, heuristique: int) -> None:
+        self.actual_cell = actual_cell
         self.parent = parent
         self.action = action
         self.depth = depth
-        self.cost = cost
+        self.energy_cost = self.set_energy_cost(energy_cost)
+        self.heuristique = heuristique
+
+    def get_actual_cell(self) -> Cell:
+        return self.actual_cell
+
+    def get_parent(self) -> Node:
+        return self.parent
+
+    def get_action(self) -> str:
+        return self.action
+
+    def get_depth(self) -> int:
+        return self.depth
+
+    def get_energy_cost(self) -> int:
+        return self.energy_cost
+
+    def get_heuristique(self) -> int:
+        return self.heuristique
+
+    def set_actual_cell(self, actual_cell: Cell) -> None:
+        self.actual_cell = actual_cell
+
+    def set_parent(self, parent: Node) -> None:
+        self.parent = parent
+
+    def set_action(self, action: str) -> None:
+        self.action = action
+
+    def set_depth(self, depth: int) -> None:
+        self.depth = depth
+
+    def set_energy_cost(self, energy_cost: int) -> None:
+        self.energy_cost = energy_cost
+    
+    def set_heuristique(self, heuristique: int) -> None:
         self.heuristique = heuristique
 
     def __str__(self) -> str:
@@ -20,8 +56,8 @@ class Node:
         successors: list[Node] = []
         actions = self.possible_actions(grid)
         for action in actions:
-            s = Node(self.position_after_action(action, grid), self, action,
-                     self.depth+1, self.parent.get_cost()+self.cost_action(action), 0)
+            s = Node(self.position_after_action(action, grid), self,
+                     action, self.depth+1, self.parent.get_energy_cost()+1, 0)  # Ajoute 1 de profondeur et 1 au coût énergétique global pour chaque action effectuée
             self.affect_heuristique(robot)
             successors.append(s)
         return successors
@@ -61,5 +97,3 @@ class Node:
         if self.actualCell.get_posY() > 0:
             actions.append("up")
         return actions
-
-    
