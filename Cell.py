@@ -10,7 +10,7 @@ class Cell:
         self.posY = posY
 
     def __str__(self) -> str:
-        return "[" + str(self.dust) + "/" + str(self.jewel) + "] in (" + str(self.get_posX()) + "/" + str(self.get_posY()) + ")"
+        return "[" + str(self.dust) + "/" + str(self.jewel) + "] in (" + str(self.posX) + "/" + str(self.posY) + ")"
 
     def get_dust(self) -> int:
         return self.dust
@@ -37,11 +37,11 @@ class Cell:
         self.jewel = jewel
 
     def clone(self) -> Cell:
-        return Cell(self.get_dust(), self.get_jewel(), self.get_posX(), self.get_posY())
+        return Cell(self.dust, self.jewel, self.posX, self.posY)
 
     # ----- Fonction qui indique la distance d'une cellule dont on lui fournit les coordonnées jusqu'à elle même -----#
     def distance(self, cell_posX: int, cell_posY: int) -> int:
-        distX = self.get_posX() - cell_posX
-        distY = self.get_posY() - cell_posY
+        distX = self.posX - cell_posX
+        distY = self.posY - cell_posY
         distTot = abs(distX) + abs(distY)
         return distTot  # --- Distance en nombre de déplacement total---##

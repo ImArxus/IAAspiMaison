@@ -3,7 +3,6 @@ from Node import Node
 from Grid import Grid
 from Cell import Cell
 
-# Obtenir la position de l'aspirateur
 grid = Grid(5, 4)
 cell1 = Cell(1, 0, 0, 2)
 cell2 = Cell(0, 0, 4, 0)
@@ -19,13 +18,9 @@ print(robot)
 print(grid)
 robot.move_left()
 robot.move_up()
+robot.move_down()
 print(robot)
-# Créer un arbre de recherches et un stockage
-print(node)
-print(node.possible_actions(grid))
-print(node.position_after_action("down", grid))
-print(node)
-print(robot.goal())
+print("Dust : " + str(robot.goal()))
 """node.insert(1, 'up')
 node.insert(0, 'left')
 node.insert(2, 'down')

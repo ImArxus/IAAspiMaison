@@ -10,7 +10,7 @@ class Node:
         self.parent = parent
         self.action = action
         self.depth = depth
-        self.energy_cost = self.set_energy_cost(energy_cost)
+        self.energy_cost = energy_cost
         self.heuristique = heuristique
 
     def get_actual_cell(self) -> Cell:
@@ -50,7 +50,7 @@ class Node:
         self.heuristique = heuristique
 
     def __str__(self) -> str:
-        return "Actual cell : " + self.actualCell.__str__()
+        return "Actual cell : " + self.actual_cell.__str__()
 
     def expand(self, grid: Grid, robot) -> list:
         successors: list[Node] = []
@@ -63,37 +63,37 @@ class Node:
         return successors
 
     def position_after_action(self, action: str, grid: Grid) -> Cell:
-        cell_cloned = self.actualCell.clone()
+        cell_cloned = self.actual_cell.clone()
         if action == "grab":
             cell_cloned.set_jewel(0)
         elif action == "clean":
             cell_cloned.set_dust(0)
         elif action == "up" and cell_cloned.get_posY() > 0:
             cell_cloned = grid.get_cell(
-                self.actualCell.get_posX(), self.actualCell.get_posY()-1).clone()
+                self.actual_cell.get_posX(), self.actual_cell.get_posY()-1).clone()
         elif action == "down" and cell_cloned.get_posY() < grid.get_rows():
             cell_cloned = grid.get_cell(
-                self.actualCell.get_posX(), self.actualCell.get_posY()+1).clone()
+                self.actual_cell.get_posX(), self.actual_cell.get_posY()+1).clone()
         elif action == "left" and cell_cloned.get_posX() > 0:
             cell_cloned = grid.get_cell(
-                self.actualCell.get_posX()-1, self.actualCell.get_posY()).clone()
+                self.actual_cell.get_posX()-1, self.actual_cell.get_posY()).clone()
         elif action == "down" and cell_cloned.get_posX() < grid.get_cols():
             cell_cloned = grid.get_cell(
-                self.actualCell.get_posX()+1, self.actualCell.get_posY()).clone()
+                self.actual_cell.get_posX()+1, self.actual_cell.get_posY()).clone()
         return cell_cloned
 
     def possible_actions(self, grid: Grid) -> list[str]:
         actions = []
-        if self.actualCell.get_dust() > 0:
+        if self.actual_cell.get_dust() > 0:
             actions.append("clean")
-        if self.actualCell.get_jewel() > 0:
+        if self.actual_cell.get_jewel() > 0:
             actions.append("grab")
-        if self.actualCell.get_posX() < grid.get_cols():
+        if self.actual_cell.get_posX() < grid.get_cols():
             actions.append("right")
-        if self.actualCell.get_posX() > 0:
+        if self.actual_cell.get_posX() > 0:
             actions.append("left")
-        if self.actualCell.get_posY() < grid.get_rows():
+        if self.actual_cell.get_posY() < grid.get_rows():
             actions.append("down")
-        if self.actualCell.get_posY() > 0:
+        if self.actual_cell.get_posY() > 0:
             actions.append("up")
         return actions
