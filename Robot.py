@@ -69,5 +69,18 @@ class Robot:
         return node_list[0]
 
     def goal(self) -> Cell:
-        goal = Cell()
+        cells_with_dust: list[Cell] = []
+        for i in range(self.get_expected_grid().get_rows()):
+            for j in range(self.get_expected_grid().get_cols()):
+                if self.get_expected_grid().get_cell(j, i).get_dust() > 0:
+                    cells_with_dust.append(
+                        self.get_expected_grid().get_cell(j, i))
+        goal = Cell(0, 0, self.get_posX(), self.get_posY())
+        if len(cells_with_dust) > 0:
+            goal = cells_with_dust[0]
+            for cell in cells_with_dust:
+                robot_position = self.get_expected_grid().get_cell(
+                    self.get_posX(), self.get_posY())
+                if robot_position.distance(cell.get_posX(), cell.get_posY()) < robot_position.distance(goal.get_posX(), goal.get_posY()):
+                    goal = cell
         return goal
