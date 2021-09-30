@@ -33,18 +33,8 @@ class Cell:
     def set_jewel(self, jewel):
         self.jewel = jewel
 
-
-
-
     def clone(self) -> Cell:
         return Cell(self.get_dust(), self.get_jewel(), self.get_posX(), self.get_posY())
-
-    def distance(self, cellPosX,
-                 cellPosY):  ##----- Fonction qui indique la distance d'une cellule dont on lui fournit les coordonnées jusqu'a elle même -----#
-        distX = self.posX - cellPosX
-        distY = self.posY - cellPosY
-        distTot = abs(distX) + abs(distY)
-        return distTot  ##--- distance en nombre de déplacement total---##
 
     def heuristique(self, listCells): #--- On obtient l'element de la liste le plus proche de la case où on est ---#
         bestCaseToGo = 25
