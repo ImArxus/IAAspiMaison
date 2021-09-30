@@ -1,7 +1,7 @@
-from Robot import Robot
-from Node import Node
-from Grid import Grid
-from Cell import Cell
+from Agent.Robot import Robot
+from Environment.Node import Node
+from Environment.Grid import Grid
+from Environment.Cell import Cell
 
 grid = Grid(5, 4)
 cell1 = Cell(1, 0, 0, 2)

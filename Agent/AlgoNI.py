@@ -1,6 +1,6 @@
-from Robot import Robot
-from Grid import Grid
-from Cell import Cell
+from Agent.Robot import Robot
+from Environment.Grid import Grid
+from Environment.Cell import Cell
 from Position import Position
 import random
 

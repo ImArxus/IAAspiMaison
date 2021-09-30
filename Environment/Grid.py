@@ -1,4 +1,4 @@
-from Cell import Cell
+from Environment.Cell import Cell
 
 
 class Grid:

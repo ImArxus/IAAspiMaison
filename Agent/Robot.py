@@ -1,6 +1,6 @@
-from Node import Node
-from Cell import Cell
-from Grid import Grid
+from Environment.Node import Node
+from Environment.Cell import Cell
+from Environment.Grid import Grid
 
 
 class Robot:
