@@ -28,3 +28,22 @@ class Grid:
 
     def set_cell(self, posX: int, posY: int, cell: Cell) -> None:
         self.grid[posY][posX] = cell
+
+    def list_special_cells(self) -> list:
+        index = 0
+        listIndexSpecialCells = []
+        for cell in self.grid:
+            if cell.get_dust() == 1 or cell.get_jewel() == 1:
+                listIndexSpecialCells.append(index)
+                index += 1
+        return listIndexSpecialCells
+
+    def list_each_path_size(self,posX: int, posY: int) -> dict:
+        index = 0
+        list = {}
+        for cell in self.grid:
+            list[index] = cell.distance(posX,posY)
+            index += 1
+        return list
+
+
