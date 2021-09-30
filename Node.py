@@ -64,7 +64,7 @@ class Node:
 
     def position_after_action(self, action: str, grid: Grid) -> Cell:
         cell_cloned = self.actual_cell.clone()
-        if action == "grab":
+        if action == "pick up":
             cell_cloned.set_jewel(0)
         elif action == "clean":
             cell_cloned.set_dust(0)
@@ -87,7 +87,7 @@ class Node:
         if self.actual_cell.get_dust() > 0:
             actions.append("clean")
         if self.actual_cell.get_jewel() > 0:
-            actions.append("grab")
+            actions.append("pick up")
         if self.actual_cell.get_posX() < grid.get_cols():
             actions.append("right")
         if self.actual_cell.get_posX() > 0:
