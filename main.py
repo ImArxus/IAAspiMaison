@@ -27,9 +27,6 @@ def main():
     threads.append(thread_Robot)
 
 
-
-    
-
     # Wait for all threads to complete
     for t in threads:
         t.join()
