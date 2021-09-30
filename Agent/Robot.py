@@ -4,7 +4,6 @@ from Environment.Grid import Grid
 from Agent.Effectors import Effectors
 from Agent.Sensors import Sensors
 
-
 class Robot:
 
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
