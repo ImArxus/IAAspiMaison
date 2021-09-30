@@ -15,7 +15,7 @@ class Thread_Environnement(threading.Thread):
     def run(self):
       print( "Starting" + self.name)
       # Get lock to synchronize threads
-      threadLock.acquire()
+      #threadLock.acquire()
       for col in range(self.environnement.get_cols()):
         for line in range(self.environnement.get_rows()):
             piece = self.environnement.get_cell(col,line) 
@@ -27,14 +27,11 @@ class Thread_Environnement(threading.Thread):
             if  n==10 :
                 piece.set_dust(1)
                 piece.set_jewel(1)
-    
-            
       # Free lock to release next thread
-      
-      print(" thread terminé")
-      print(self.environnement)
-      threadLock.release()
 
+      print(self.environnement)
+      #threadLock.release()
+      threading.Timer(3000,self.run()).start()
 
 
 
