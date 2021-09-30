@@ -57,8 +57,9 @@ def analyseGrid(gr:Grid,pos:Position)-> Cell:
         return None
 
 #Appel de la fonction
+cellObtained:Cell=None
 while ~finished:
-    cellObtained:Cell=analyseGrid(grid,posToVisit[0])
+    cellObtained=analyseGrid(grid,posToVisit[0])
     if(cellObtained!=None):
         finished=True
         print("Position de la case trouvée: ")
@@ -71,3 +72,10 @@ while ~finished:
 print("")
 print("Noeuds étudiés : ")
 print(nodeStudied)
+#Déplacement du robot
+print("")
+print("Déplacement robot : ")
+print(rbt)
+rbt.move_Robot(cellObtained)
+print(rbt)
+print("over")
