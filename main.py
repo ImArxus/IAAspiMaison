@@ -11,6 +11,7 @@ from random import *
 
 def main():
     manoir = Grid.Grid(5,5)
+    update_time = 0
 
     threads = []
     
@@ -26,14 +27,8 @@ def main():
     threads.append(thread_Manoir)
     threads.append(thread_Robot)
 
-
-
     
 
-    # Wait for all threads to complete
-    for t in threads:
-        t.join()
-    print( "Exiting Main Thread")
     c = 40     # Longueur d'un cote d'une piece
     n = 5      # Nombre de piece par ligne et pas colonne
     cases = [] 
@@ -71,6 +66,12 @@ def main():
             else:                                                                                                              # rien
                 dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='white')
     fen.mainloop() 
+   
+    # Wait for all threads to complete
+    ##for t in threads:
+        ##t.join()
+    ##print( "Exiting Main Thread")
+   
 
 
 
