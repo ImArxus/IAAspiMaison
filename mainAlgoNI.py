@@ -2,7 +2,6 @@ from Agent.Effectors import Effectors
 from Agent.Robot import Robot
 from Environment.Grid import Grid
 from Environment.Cell import Cell
-from Position import Position
 from AlgoNI import AlgoNI
 
 # Création du robot et de la grille
@@ -14,12 +13,13 @@ algoni: AlgoNI = AlgoNI(grid, rbt)
 for i in range(1, 2):
     # Initiation du code
     nodeToVisit = []
-    posToVisit = []
+    cellToVisit = []
     nodeStudied = []
-    currentPos = Position(rbt.posX, rbt.posY)
+
+    currentPos = grid.get_cell(rbt.posX, rbt.posY)
     finished: bool = False
     nodeToVisit.append(currentPos.get_pos())
-    posToVisit.append(currentPos)
+    cellToVisit.append(currentPos)
     algoni.insertDustTest()
     algoni.insertDustTest()
     algoni.insertDustTest()
@@ -27,9 +27,9 @@ for i in range(1, 2):
     print(rbt)
     # Appel de la fonction
     cellObtained: Cell = None
-    while ~finished & len(posToVisit) > 0:
+    while ~finished & len(cellToVisit) > 0:
         cellObtained = algoni.analyseGrid(
-            posToVisit[0], nodeStudied, nodeToVisit, posToVisit)
+            cellToVisit[0], nodeStudied, nodeToVisit, cellToVisit)
         if(cellObtained != None):
             finished = True
             print("Position de la case trouvée: ")

@@ -35,6 +35,9 @@ class Cell:
 
     def set_jewel(self, jewel: int) -> None:
         self.jewel = jewel
+        
+    def get_pos(self) -> str:
+        return str(self.posX)+""+str(self.posY)
 
     def clone(self) -> Cell:
         return Cell(self.dust, self.jewel, self.posX, self.posY)
