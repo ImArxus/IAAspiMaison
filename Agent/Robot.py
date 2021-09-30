@@ -1,15 +1,20 @@
 from Environment.Node import Node
 from Environment.Cell import Cell
 from Environment.Grid import Grid
+from Agent.Effectors import Effector
+from Agent.Sensors import Sensor
 
 
 class Robot:
+    
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
         self.posX = posX
         self.posY = posY
         self.actions_expected: list[str] = []
         self.expected_grid = grid
         self.performance = 0
+        self.effectors = Effector(self)
+        self.sensors = Sensor(self)
 
     def get_posX(self) -> int:
         return self.posX
@@ -37,26 +42,6 @@ class Robot:
 
     def __str__(self) -> str:
         return "Robot is in :  {self.posX} , {self.posY}".format(self=self)
-
-    def move_left(self) -> None:
-        if self.posX > 0:
-            self.posX = self.posX-1
-            print("Robot has moved left")
-
-    def move_right(self) -> None:
-        if self.posX < self.expected_grid.get_cols():
-            self.posX = self.posX+1
-            print("Robot has moved right")
-
-    def move_up(self) -> None:
-        if self.posY > 0:
-            self.posY = self.posY-1
-            print("Robot has moved up")
-
-    def move_down(self) -> None:
-        if self.posY < self.expected_grid.get_rows():
-            self.posY = self.posY+1
-            print("Robot has moved down")
 
     def generate_actions(self, informed_search: bool) -> None:
         nodes: Node
@@ -150,16 +135,6 @@ class Robot:
                 if robot_node.distance(cell.get_posX(), cell.get_posY()) < robot_node.distance(goal.get_posX(), goal.get_posY()):
                     goal = cell
         return goal
-
-    def move_Robot(self, cellArrival: Cell) -> None:
-        while self.get_posX() < cellArrival.get_posX():
-            self.move_right()
-        while self.get_posX() > cellArrival.get_posX():
-            self.move_left()
-        while self.get_posY() < cellArrival.get_posY():
-            self.move_down()
-        while self.get_posY() > cellArrival.get_posY():
-            self.move_up()
 
     def clean(self, cellToClean: Cell) -> None:
         cellToClean.set_dust(0)
