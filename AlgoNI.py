@@ -5,6 +5,8 @@ from Position import Position
 import random
 
 # Insertion de poussière de manière aléatoire
+
+
 def insertDust(gr: Grid) -> None:
     rdm1: int = random.randint(0, grid.get_cols()-1)
     rdm2: int = random.randint(0, grid.get_rows()-1)
@@ -17,6 +19,8 @@ grid = Grid(5, 5)
 rbt = Robot(0, 1, grid)
 
 # Fonction d'analyse de la grille
+
+
 def analyseGrid(gr: Grid, pos: Position) -> Cell:
     nodeStudied.append(pos.get_pos())
     del nodeToVisit[0]
@@ -49,7 +53,7 @@ def analyseGrid(gr: Grid, pos: Position) -> Cell:
 
 
 # Création d'une boucle
-for i in range(1, 5):
+for i in range(1, 2):
     # Initiation du code
     nodeToVisit = []
     posToVisit = []
@@ -81,6 +85,8 @@ for i in range(1, 5):
     print("")
     print("Déplacement robot : ")
     print(rbt)
-    rbt.move_Robot(cellObtained)
-    rbt.clean(cellObtained)
-    print(rbt)
+
+rbt.calcul_Dest_To_Case(cellObtained)
+print(rbt.get_actions_expected())
+rbt.act_Robot(cellObtained)
+print(rbt)

@@ -6,7 +6,7 @@ from Agent.Sensors import Sensor
 
 
 class Robot:
-    
+
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
         self.posX = posX
         self.posY = posY
@@ -136,8 +136,41 @@ class Robot:
                     goal = cell
         return goal
 
-    def clean(self, cellToClean: Cell) -> None:
-        cellToClean.set_dust(0)
+    def calcul_Dest_To_Case(self, cellArrival: Cell) -> None:
+        listToReturn: list[str] = []
+        posX: int = self.get_posX()
+        posY: int = self.get_posY()
+        while posX < cellArrival.get_posX():
+            listToReturn.append('right')
+            posX += 1
+        while posX > cellArrival.get_posX():
+            listToReturn.append('left')
+            posX -= 1
+        while posY < cellArrival.get_posY():
+            listToReturn.append('down')
+            posY += 1
+        while posY > cellArrival.get_posY():
+            listToReturn.append('up')
+            posY -= 1
+        if cellArrival.get_dust() == 1:
+            listToReturn.append('clean')
+        else:
+            listToReturn.append('grab')
+        self.actions_expected = listToReturn
 
-    def grab(self, cellToGrab: Cell) -> None:
-        cellToGrab.set_jewel(0)
+    def act_Robot(self, cellArrival: Cell) -> None:
+        while len(self.actions_expected) > 0:
+            action: str = self.actions_expected[0]
+            self.actions_expected.remove(action)
+            if(action == 'right'):
+                self.effectors.move_right()
+            elif(action == 'left'):
+                self.effectors.move_left()
+            elif(action == 'down'):
+                self.effectors.move_down()
+            elif(action == 'up'):
+                self.effectors.move_up
+            elif(action == 'grab'):
+                self.effectors.grab(cellArrival)
+            else:
+                self.effectors.clean(cellArrival)
