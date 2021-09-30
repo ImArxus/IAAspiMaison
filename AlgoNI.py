@@ -1,3 +1,4 @@
+from Agent.Effectors import Effectors
 from Agent.Robot import Robot
 from Environment.Grid import Grid
 from Environment.Cell import Cell
@@ -14,6 +15,7 @@ def insertDust(gr:Grid)-> None:
 # Création du robot et de la grille
 grid = Grid(5,5)
 rbt = Robot(0,1,grid)
+eff:Effectors=Effectors(rbt)
 
 #Fonction d'analyse de la grille
 def analyseGrid(gr:Grid,pos:Position)-> Cell:
@@ -57,11 +59,13 @@ for i in range(1,2):
     nodeToVisit.append(currentPos.get_pos())
     posToVisit.append(currentPos)
     insertDust(grid)
+    insertDust(grid)
+    insertDust(grid)
     print(grid)
     print(rbt)
     #Appel de la fonction
     cellObtained:Cell=None
-    while ~finished:
+    while ~finished & len(posToVisit)>0:
         cellObtained=analyseGrid(grid,posToVisit[0])
         if(cellObtained!=None):
             finished=True
@@ -76,10 +80,11 @@ for i in range(1,2):
     print("Noeuds étudiés : ")
     print(nodeStudied)
     #Déplacement du robot
-    print("")
-    print("Déplacement robot : ")
-    print(rbt)
-    rbt.calcul_Dest_To_Case(cellObtained)
-    print(rbt.get_actions_expected())
-    rbt.act_Robot(cellObtained)
-    print(rbt)
+    if(cellObtained!=None):
+        print("")
+        print("Déplacement robot : ")
+        print(rbt)
+        rbt.calcul_Dest_To_Case(cellObtained)
+        print(rbt.get_actions_expected())
+        eff.action_robot(cellObtained)
+        print(rbt)
