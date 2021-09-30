@@ -1,13 +1,13 @@
-from Node import Node
-from Cell import Cell
-from Grid import Grid
+from Environment.Node import Node
+from Environment.Cell import Cell
+from Environment.Grid import Grid
 
 
 class Robot:
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
         self.posX = posX
         self.posY = posY
-        self.actions_expected = list[str]
+        self.actions_expected: list[str] = []
         self.expected_grid = grid
         self.performance = 0
 
@@ -58,7 +58,7 @@ class Robot:
             self.posY = self.posY+1
             print("Robot has moved down")
 
-    def generate_action(self, informed_search: bool) -> None:
+    def generate_actions(self, informed_search: bool) -> None:
         nodes: Node
         if informed_search:
             nodes = self.a_star(self.expected_grid)
@@ -66,11 +66,25 @@ class Robot:
             print("Uninfomred search")  # TODO
         generated_actions: list[str] = []
         action = "start"
+        actions = self.reverse_nodes(nodes)
+        actions.reverse()
+        del actions[0]
+        action = "start"
         while action != "":
-            action = nodes.get_action()
-            generated_actions.append(action)
-            nodes.get_parent()
+            if len(actions) > 0:
+                action = actions[0]
+                generated_actions.append(action)
+                del actions[0]
+            else:
+                action = ""
         self.actions_expected = generated_actions
+
+    def reverse_nodes(self, nodes: Node) -> list[str]:
+        actions: list[str] = []
+        while(nodes.get_parent() != None):
+            actions.append(nodes.get_action())
+            nodes = nodes.get_parent()
+        return actions
 
     def a_star(self, grid: Grid) -> Node:
         node = Node(grid.get_cell(self.posX, self.posY), Node(
@@ -178,6 +192,6 @@ class Robot:
     
     def clean(self,cellToClean:Cell)->None:
         cellToClean.set_dust(0)
-    
-    def grab(self,cellToGrab:Cell)->None:
+
+    def grab(self, cellToGrab: Cell) -> None:
         cellToGrab.set_jewel(0)

@@ -1,7 +1,7 @@
-from Robot import Robot
-from Node import Node
-from Grid import Grid
-from Cell import Cell
+from Agent.Robot import Robot
+from Environment.Node import Node
+from Environment.Grid import Grid
+from Environment.Cell import Cell
 
 grid = Grid(5, 4)
 cell1 = Cell(1, 0, 0, 2)
@@ -22,7 +22,8 @@ robot.move_down()
 print(robot)
 #print("Dust : " + str(robot.goal()))
 print(robot.perfomance_after_action(node, "right"))
-print(robot.generate_action(True))
+robot.generate_actions(True)
+print(robot.get_actions_expected())
 
 # Analyser l'état de la pièce actuelle
 # S'il y a de la poussière > aspirer

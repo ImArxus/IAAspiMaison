@@ -1,6 +1,6 @@
 from __future__ import annotations
-from Cell import Cell
-from Grid import Grid
+from Environment.Cell import Cell
+from Environment.Grid import Grid
 
 
 class Node:
