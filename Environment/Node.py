@@ -11,6 +11,7 @@ class Node:
         self.action = action
         self.depth = depth
         self.energy_cost = energy_cost
+        # Heuristique : distance par rapport a la case cible
         self.heuristique = heuristique
 
     def get_actual_cell(self) -> Cell:
@@ -52,24 +53,26 @@ class Node:
     def __str__(self) -> str:
         return "Actual cell : " + self.actual_cell.__str__()
 
-    # ----- Fonction qui indique la distance d'un noeud, dont on lui fournit les coordonnées, jusqu'à elle même -----#
+    # Fonction qui indique la distance d un noeud, dont on lui fournit les coordonnees, jusqu a elle meme #
     def distance(self, node_posX: int, node_posY: int) -> int:
         distX = self.actual_cell.get_posX() - node_posX
         distY = self.actual_cell.get_posY() - node_posY
         distTot = abs(distX) + abs(distY)
-        return distTot  # --- Distance en nombre de déplacement total---##
+        return distTot  # Distance en nombre de deplacements totale ##
 
+    # Donne la liste des noeuds voisins en fonction des actions possibles
     def expand(self, grid: Grid, robot) -> list:
         successors: list[Node] = []
         actions = self.possible_actions(grid)
+        # Cellule la plus proche contenant de la poussiere pour ajouter la distance par rapport a celle ci dans l heuristique
         goal = robot.get_sensors().goal()
         for action in actions:
             s = Node(self.position_after_action(action, grid), self,
                      action, self.depth+1, self.parent.get_energy_cost()+1, self.distance(goal.get_posX(), goal.get_posY()))  # Ajoute 1 de profondeur et 1 au coût énergétique global pour chaque action effectuée
-            # self.affect_heuristique(robot)
             successors.append(s)
         return successors
 
+    # Donne l etat de la cellule apres avoir effectuee l action donnee en parametre
     def position_after_action(self, action: str, grid: Grid) -> Cell:
         cell_cloned = self.actual_cell.clone()
         if action == "pick up":
@@ -90,6 +93,7 @@ class Node:
                 self.actual_cell.get_posX()+1, self.actual_cell.get_posY()).clone()
         return cell_cloned
 
+    # Donne la liste des actions possibles par rapport a la cellule actuelle
     def possible_actions(self, grid: Grid) -> list[str]:
         actions = []
         if self.actual_cell.get_dust() > 0:

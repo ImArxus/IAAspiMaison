@@ -6,7 +6,7 @@ from Environment.Cell import Cell
 grid = Grid(5, 5)
 cell1 = Cell(0, 0, 0, 2)
 cell2 = Cell(0, 0, 4, 0)
-cell3 = Cell(1, 0, 2, 3)
+cell3 = Cell(1, 0, 2, 0)
 grid.set_cell(cell1.get_posX(), cell1.get_posY(), cell1)
 grid.set_cell(cell2.get_posX(), cell2.get_posY(), cell2)
 grid.set_cell(cell3.get_posX(), cell3.get_posY(), cell3)

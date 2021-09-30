@@ -28,24 +28,28 @@ class AlgoNI:
             # Si la cellule contient de la saleté ou des bijoux la retourner
             return self.grid.get_cell(cell.get_posX(), cell.get_posY())
         else: # Sinon analyse des cellules voisines
-            cellR = self.grid.get_cell(cell.get_posX(),cell.get_posY()-1) # Détermination de si la cellule en haut existe et n'a pas été déjà visitée
-            if (cell.get_posY() > 0) & (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
-                nodeToVisit.append(cellR.get_pos()) # L'ajouter à la liste des cellules à visiter pour obtenir l'ordre BFS
-                posToVisit.append(cellR)
+            if (cell.get_posY() > 0): # Détermination de si la cellule en haut existe et n'a pas été déjà visitée
+                cellR = self.grid.get_cell(cell.get_posX(),cell.get_posY()-1) 
+                if (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
+                    nodeToVisit.append(cellR.get_pos()) # L'ajouter à la liste des cellules à visiter pour obtenir l'ordre BFS
+                    posToVisit.append(cellR)
 
-            cellR = self.grid.get_cell(cell.get_posX(),cell.get_posY()+1) # Même idée pour la cellule en bas
-            if (cell.get_posY() < self.grid.get_rows()-1) & (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
-                nodeToVisit.append(cellR.get_pos())
-                posToVisit.append(cellR)
+            if (cell.get_posY() < self.grid.get_rows()-1):# Même idée pour la cellule en bas
+                cellR = self.grid.get_cell(cell.get_posX(),cell.get_posY()+1) 
+                if (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
+                    nodeToVisit.append(cellR.get_pos())
+                    posToVisit.append(cellR)
 
-            cellR = self.grid.get_cell(cell.get_posX()-1,cell.get_posY()) # Même idée pour la cellule à gauche
-            if (cell.get_posX() > 0) & (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
-                nodeToVisit.append(cellR.get_pos())
-                posToVisit.append(cellR)
+            if (cell.get_posX() > 0):# Même idée pour la cellule à gauche
+                cellR = self.grid.get_cell(cell.get_posX()-1,cell.get_posY()) 
+                if (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
+                    nodeToVisit.append(cellR.get_pos())
+                    posToVisit.append(cellR)
 
-            cellR = self.grid.get_cell(cell.get_posX()+1,cell.get_posY()) # Même idée pour la cellule à droite
-            if (cell.get_posX() < self.grid.get_cols()-1) & (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
-                nodeToVisit.append(cellR.get_pos())
-                posToVisit.append(cellR)
+            if (cell.get_posX() < self.grid.get_cols()-1):# Même idée pour la cellule à droite
+                cellR = self.grid.get_cell(cell.get_posX()+1,cell.get_posY()) 
+                if(~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
+                    nodeToVisit.append(cellR.get_pos())
+                    posToVisit.append(cellR)
 
             return None # Retourner une cellule vide si la cellule actuelle n'était pas celle cherchée, de cette manière on peut analyser les autres cellules de la file

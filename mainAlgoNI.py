@@ -20,8 +20,6 @@ for i in range(1,2): # Boucle for permettant le test de plusieurs itérations de
     nodeToVisit.append(currentPos.get_pos()) # Ajout de la cellule actuelle dans celles à visiter
     cellToVisit.append(currentPos)
     algoni.insertDustTest() # Insertion de poussière dans le code
-    algoni.insertDustTest()
-    algoni.insertDustTest()
     print(grid) # Affichage de la grille et du robot
     print(rbt)
     cellObtained:Cell=None # Cellule de résultat
@@ -46,4 +44,3 @@ for i in range(1,2): # Boucle for permettant le test de plusieurs itérations de
     print("")
     print("Noeuds étudiés : ") # Affichage des noeuds étudiés
     print(nodeStudied)
-        
