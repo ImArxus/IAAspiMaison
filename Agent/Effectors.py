@@ -1,7 +1,7 @@
 from Environment.Cell import Cell
 
 
-class Effector:
+class Effectors:
 
     def __init__(self, robot) -> None:
         self.robot = robot
@@ -41,3 +41,20 @@ class Effector:
 
     def grab(self, cellToGrab: Cell) -> None:
         cellToGrab.set_jewel(0)
+
+    def action_robot(self, cellArrival: Cell) -> None:
+        while len(self.robot.get_actions_expected()) > 0:
+            action: str = self.robot.get_actions_expected()[0]
+            self.robot.get_actions_expected().remove(action)
+            if(action == 'right'):
+                self.move_right()
+            elif(action == 'left'):
+                self.move_left()
+            elif(action == 'down'):
+                self.move_down()
+            elif(action == 'up'):
+                self.move_up
+            elif(action == 'grab'):
+                self.grab(cellArrival)
+            else:
+                self.clean(cellArrival)

@@ -21,8 +21,8 @@ robot.effectors.move_up()
 robot.effectors.move_down()
 print(robot)
 #print("Dust : " + str(robot.goal()))
-print(robot.perfomance_after_action(node, "right"))
-robot.generate_actions(True)
+print(robot.get_sensors().perfomance_after_action(node, "right"))
+robot.get_sensors().generate_actions(True)
 print(robot.get_actions_expected())
 
 # Analyser l'état de la pièce actuelle
