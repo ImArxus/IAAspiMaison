@@ -7,8 +7,9 @@ class Robot:
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
         self.posX = posX
         self.posY = posY
-        self.intent = list[str]
+        self.action_expected = list[str]
         self.expected_grid = grid
+        self.performance = 0
 
     def get_posX(self) -> int:
         return self.posX
@@ -19,8 +20,8 @@ class Robot:
     def get_expected_grid(self) -> Grid:
         return self.expected_grid
 
-    def get_intent(self):
-        return self.intent
+    def get_action_expected(self):
+        return self.action_expected
 
     def set_posX(self, X: int) -> None:
         self.posX = X
@@ -31,8 +32,8 @@ class Robot:
     def set_cell_in_expected_grid(self, cell_posX: int, cell_posY: int, cell: Cell) -> None:
         self.expected_grid.set_cell(cell_posX, cell_posY, cell)
 
-    def set_intent(self, intent: list[str]) -> None:
-        self.intent = intent
+    def set_action_expected(self, action_expected: list[str]) -> None:
+        self.action_expected = action_expected
 
     def __str__(self) -> str:
         return "Robot is in :  {self.posX} , {self.posY}".format(self=self)
@@ -66,6 +67,32 @@ class Robot:
                 node_list.append(node)
             node_list.sort()
         return node_list[0]
+
+    def perfomance_after_action(self, node: Node, action: str) -> int:
+        performance = 0
+        if action == "clean":
+            performance -= 1
+            if self.expected_grid.get_cell(node.get_actual_cell().get_posX(), node.get_actual_cell().get_posY()).get_jewel() > 0:
+                performance -= 50
+            if self.expected_grid.get_cell(node.get_actual_cell().get_posX(), node.get_actual_cell().get_posY()).get_dust() > 0:
+                performance += 25
+        elif action == "pick up":
+            performance += 9  # +10 -1
+        elif action == "left" or "right" or "up" or "down":
+            performance -= 1
+        return performance
+
+    def goal_reached(self, node: Node) -> bool:
+        energy_cost: int = 0
+        action = node.get_action()
+        while action != "":
+            action = node.get_action()
+            energy_cost += self.perfomance_after_action(node, action)
+            node = node.get_parent()
+        estimated_total = energy_cost + self.performance
+        if estimated_total > self.performance:
+            return True
+        return False
 
     def goal(self) -> Cell:
         cells_with_dust: list[Cell] = []
