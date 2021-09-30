@@ -1,35 +1,85 @@
-from Agent.Robot import Robot
-from Environment.Node import Node
-from Environment.Grid import Grid
-from Environment.Cell import Cell
+import sys
+from tkinter import *
+#import AlgoNonInforme
+import Cell
+import Grid
+from random import *
+#import Node
+#import Robot
 
-grid = Grid(5, 4)
-cell1 = Cell(1, 0, 0, 2)
-cell2 = Cell(0, 0, 4, 0)
-cell3 = Cell(0, 0, 4, 3)
-grid.set_cell(cell1.get_posX(), cell1.get_posY(), cell1)
-grid.set_cell(cell2.get_posX(), cell2.get_posY(), cell2)
-grid.set_cell(cell3.get_posX(), cell3.get_posY(), cell3)
-#grid.get_cell(cell1.get_posX(), cell1.get_posY()).set_dust(0)
-grid.get_cell(cell2.get_posX(), cell2.get_posY()).set_jewel(1)
-node = Node(cell1, None, None, 0, 0, 0)
-robot = Robot(4, 0, grid)
-print(robot)
-print(grid)
-robot.effectors.move_left()
-robot.effectors.move_up()
-robot.effectors.move_down()
-print(robot)
-#print("Dust : " + str(robot.goal()))
-print(robot.get_sensors().perfomance_after_action(node, "right"))
-robot.get_sensors().generate_actions(True)
-print(robot.get_actions_expected())
 
-# Analyser l'état de la pièce actuelle
-# S'il y a de la poussière > aspirer
-# S'il y a un bijou > le ramasser
-# Sinon récursivité :
-# Chercher les pièces juxtaposées jamais explorées et en créer des noeuds à ajouter à l'arbre et au stockage
-# Répéter jusqu'à trouver une pièce sale puis retourner l'arbre créé
-# En utilisant l'arbre déplacer le robot puis aspirer ou ramasser
-# Répéter
+ 
+
+
+
+def main():
+    manoir = Grid.Grid(5,5)
+    print(manoir)
+    for col in range(manoir.get_cols()):
+        for line in range(manoir.get_rows()):
+            piece = manoir.get_cell(col,line) 
+            n = randint(1,10)
+            if n>=5 and n<=7 :
+                piece.set_dust(1)
+            if n>=8 and n<=9 :
+                piece.set_jewel(1)
+            if  n==10 :
+                piece.set_dust(1)
+                piece.set_jewel(1)
+    print(manoir)
+
+
+
+    c = 40     # Longueur d'un cote d'une piece
+    n = 5      # Nombre de piece par ligne et pas colonne
+    cases = [] 
+
+   ##----- Creation de la fenetre -----##
+    fen = Tk()
+    fen.title('IAAspiMaison')
+
+
+
+   ##----- Creation des boutons -----##
+    bouton_quitter = Button(fen, text='Quitter', command=fen.destroy)
+    bouton_quitter.grid(row = 1, column = 1, sticky=W+E, padx=3, pady=3)
+
+   ##----- Creation des canevas -----##
+    dessin = Canvas(fen, width= n*c+2, height = n*c+2)
+    dessin.grid(row = 0, column = 0, columnspan=2, padx=3, pady=3)
+
+   ##----- Creation des figures -----##
+    for ligne in range(n):          # Les cases de chaque ligne seront stockees dans "pieces"
+        pieces=[]
+        for colonne in range(n):    # Conception des pieces d'une ligne
+            pieces.append(dessin.create_rectangle(colonne*c, ligne*c, (colonne+1)*c, (ligne+1)*c))
+        cases.append(pieces)       # Ajout de la ligne a la liste principale
+
+    ##----- Modification des figures creees -----##
+    for ligne in range(n):
+        for colonne in range(n):
+            if ( (manoir.get_cell(ligne,colonne).get_dust()) == 1 and (manoir.get_cell(ligne,colonne).get_jewel()) == 1 ):     # dirt + jewel
+                dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='yellow' )
+            elif ( (manoir.get_cell(ligne,colonne).get_dust()) == 1 and (manoir.get_cell(ligne,colonne).get_jewel()) == 0 ): # dirt only
+                dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='red')
+            elif ( (manoir.get_cell(ligne,colonne).get_dust()) == 0 and (manoir.get_cell(ligne,colonne).get_jewel()) == 1 ):  # jewel only
+                dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='blue')
+            else:                                                                                                              # rien
+                dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='white')
+    fen.mainloop() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    main()
