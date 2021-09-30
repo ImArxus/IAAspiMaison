@@ -146,3 +146,9 @@ class Robot:
             self.move_down()
         while self.get_posY()>cellArrival.get_posY():
             self.move_up()
+    
+    def clean(self,cellToClean:Cell)->None:
+        cellToClean.set_dust(0)
+    
+    def grab(self,cellToGrab:Cell)->None:
+        cellToGrab.set_jewel(0)

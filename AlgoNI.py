@@ -4,26 +4,16 @@ from Cell import Cell
 from Position import Position
 import random
 
+#Insertion de poussière de manière aléatoire
+def insertDust(gr:Grid)-> None:
+    rdm1:int = random.randint(0,grid.get_cols()-1)
+    rdm2:int = random.randint(0,grid.get_rows()-1)
+    dustcell: Cell = grid.get_cell(rdm1,rdm2)
+    dustcell.set_dust(1)
+
 # Création du robot et de la grille
 grid = Grid(5,5)
 rbt = Robot(0,1,grid)
-
-#Insertion de poussière de manière aléatoire
-rdm1:int = random.randint(0,grid.get_cols()-1)
-rdm2:int = random.randint(0,grid.get_rows()-1)
-dustcell: Cell = grid.get_cell(rdm1,rdm2)
-dustcell.set_dust(1)
-print(grid)
-print(rbt)
-
-#Initiation du code
-nodeToVisit = []
-posToVisit = []
-nodeStudied = []
-currentPos = Position(rbt.posX,rbt.posY)
-finished:bool=False
-nodeToVisit.append(currentPos.get_pos())
-posToVisit.append(currentPos)
 
 #Fonction d'analyse de la grille
 def analyseGrid(gr:Grid,pos:Position)-> Cell:
@@ -56,26 +46,39 @@ def analyseGrid(gr:Grid,pos:Position)-> Cell:
         
         return None
 
-#Appel de la fonction
-cellObtained:Cell=None
-while ~finished:
-    cellObtained=analyseGrid(grid,posToVisit[0])
-    if(cellObtained!=None):
-        finished=True
-        print("Position de la case trouvée: ")
-        print(cellObtained.get_posX(), cellObtained.get_posY())
-        if(cellObtained.get_dust()==1):
-            print("Contient de la saleté")
-        else:
-            print("Contient des bijoux")
-        break
-print("")
-print("Noeuds étudiés : ")
-print(nodeStudied)
-#Déplacement du robot
-print("")
-print("Déplacement robot : ")
-print(rbt)
-rbt.move_Robot(cellObtained)
-print(rbt)
-print("over")
+#Création d'une boucle
+for i in range(1,5):
+    #Initiation du code
+    nodeToVisit = []
+    posToVisit = []
+    nodeStudied = []
+    currentPos = Position(rbt.posX,rbt.posY)
+    finished:bool=False
+    nodeToVisit.append(currentPos.get_pos())
+    posToVisit.append(currentPos)
+    insertDust(grid)
+    print(grid)
+    print(rbt)
+    #Appel de la fonction
+    cellObtained:Cell=None
+    while ~finished:
+        cellObtained=analyseGrid(grid,posToVisit[0])
+        if(cellObtained!=None):
+            finished=True
+            print("Position de la case trouvée: ")
+            print(cellObtained.get_posX(), cellObtained.get_posY())
+            if(cellObtained.get_dust()==1):
+                print("Contient de la saleté")
+            else:
+                print("Contient des bijoux")
+            break
+    print("")
+    print("Noeuds étudiés : ")
+    print(nodeStudied)
+    #Déplacement du robot
+    print("")
+    print("Déplacement robot : ")
+    print(rbt)
+    rbt.move_Robot(cellObtained)
+    rbt.clean(cellObtained)
+    print(rbt)
