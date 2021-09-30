@@ -47,7 +47,7 @@ def analyseGrid(gr:Grid,pos:Position)-> Cell:
         return None
 
 #Création d'une boucle
-for i in range(1,5):
+for i in range(1,2):
     #Initiation du code
     nodeToVisit = []
     posToVisit = []
@@ -79,6 +79,7 @@ for i in range(1,5):
     print("")
     print("Déplacement robot : ")
     print(rbt)
-    rbt.move_Robot(cellObtained)
-    rbt.clean(cellObtained)
+    rbt.calcul_Dest_To_Case(cellObtained)
+    print(rbt.get_actions_expected())
+    rbt.act_Robot(cellObtained)
     print(rbt)

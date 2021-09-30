@@ -137,15 +137,44 @@ class Robot:
                     goal = cell
         return goal
     
-    def move_Robot(self,cellArrival:Cell) -> None:
-        while self.get_posX()<cellArrival.get_posX():
-            self.move_right()
-        while self.get_posX()>cellArrival.get_posX():
-            self.move_left()
-        while self.get_posY()<cellArrival.get_posY():
-            self.move_down()
-        while self.get_posY()>cellArrival.get_posY():
-            self.move_up()
+    def calcul_Dest_To_Case(self,cellArrival:Cell) -> None:
+        listToReturn:list[str]=[]
+        posX:int=self.get_posX()
+        posY:int=self.get_posY()
+        while posX<cellArrival.get_posX():
+            listToReturn.append('right')
+            posX+=1
+        while posX>cellArrival.get_posX():
+            listToReturn.append('left')
+            posX-=1
+        while posY<cellArrival.get_posY():
+            listToReturn.append('down')
+            posY+=1
+        while posY>cellArrival.get_posY():
+            listToReturn.append('up')
+            posY-=1
+        if cellArrival.get_dust()==1:
+            listToReturn.append('clean')
+        else:
+            listToReturn.append('grab')
+        self.actions_expected=listToReturn
+    
+    def act_Robot(self,cellArrival:Cell) -> None:
+        while len(self.actions_expected)>0:
+            action:str=self.actions_expected[0]
+            self.actions_expected.remove(action)
+            if(action=='right'):
+                self.move_right()
+            elif(action=='left'):
+                self.move_left()
+            elif(action=='down'):
+                self.move_down()
+            elif(action=='up'):
+                self.move_up
+            elif(action=='grab'):
+                self.grab(cellArrival)
+            else:
+                self.clean(cellArrival)
     
     def clean(self,cellToClean:Cell)->None:
         cellToClean.set_dust(0)
