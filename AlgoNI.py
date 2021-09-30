@@ -2,7 +2,6 @@ from Agent.Effectors import Effectors
 from Agent.Robot import Robot
 from Environment.Grid import Grid
 from Environment.Cell import Cell
-from Position import Position
 import random
 
 
@@ -20,32 +19,32 @@ class AlgoNI:
         dustcell.set_dust(1)
 
     # Fonction d'analyse de la grille
-    def analyseGrid(self, pos: Position, nodeStudied, nodeToVisit, posToVisit) -> Cell:
-        nodeStudied.append(pos.get_pos())
+    def analyseGrid(self, cell:Cell, nodeStudied, nodeToVisit, posToVisit) -> Cell:
+        nodeStudied.append(cell.get_pos())
         del nodeToVisit[0]
         del posToVisit[0]
 
-        if (self.grid.get_cell(pos.get_posX(), pos.get_posY()).get_dust() == 1) | (self.grid.get_cell(pos.get_posX(), pos.get_posY()).get_jewel() == 1):
-            return self.grid.get_cell(pos.get_posX(), pos.get_posY())
+        if (self.grid.get_cell(cell.get_posX(), cell.get_posY()).get_dust() == 1) | (self.grid.get_cell(cell.get_posX(), cell.get_posY()).get_jewel() == 1):
+            return self.grid.get_cell(cell.get_posX(), cell.get_posY())
         else:
-            newPos = Position(pos.get_posX(), pos.get_posY()-1)
-            if (pos.get_posY() > 0) & (~nodeStudied.__contains__(newPos.get_pos())) & (~nodeToVisit.__contains__(newPos.get_pos())):
-                nodeToVisit.append(newPos.get_pos())
-                posToVisit.append(newPos)
+            cellR = self.grid.get_cell(cell.get_posX(),cell.get_posY()-1)
+            if (cell.get_posY() > 0) & (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
+                nodeToVisit.append(cellR.get_pos())
+                posToVisit.append(cellR)
 
-            newPos = Position(pos.get_posX(), pos.get_posY()+1)
-            if (pos.get_posY() < self.grid.get_rows()-1) & (~nodeStudied.__contains__(newPos.get_pos())) & (~nodeToVisit.__contains__(newPos.get_pos())):
-                nodeToVisit.append(newPos.get_pos())
-                posToVisit.append(newPos)
+            cellR = self.grid.get_cell(cell.get_posX(),cell.get_posY()+1)
+            if (cell.get_posY() < self.grid.get_rows()-1) & (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
+                nodeToVisit.append(cellR.get_pos())
+                posToVisit.append(cellR)
 
-            newPos = Position(pos.get_posX()-1, pos.get_posY())
-            if (pos.get_posX() > 0) & (~nodeStudied.__contains__(newPos.get_pos())) & (~nodeToVisit.__contains__(newPos.get_pos())):
-                nodeToVisit.append(newPos.get_pos())
-                posToVisit.append(newPos)
+            cellR = self.grid.get_cell(cell.get_posX()-1,cell.get_posY())
+            if (cell.get_posX() > 0) & (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
+                nodeToVisit.append(cellR.get_pos())
+                posToVisit.append(cellR)
 
-            newPos = Position(pos.get_posX()+1, pos.get_posY())
-            if (pos.get_posX() < self.grid.get_cols()-1) & (~nodeStudied.__contains__(newPos.get_pos())) & (~nodeToVisit.__contains__(newPos.get_pos())):
-                nodeToVisit.append(newPos.get_pos())
-                posToVisit.append(newPos)
+            cellR = self.grid.get_cell(cell.get_posX()+1,cell.get_posY())
+            if (cell.get_posX() < self.grid.get_cols()-1) & (~nodeStudied.__contains__(cellR.get_pos())) & (~nodeToVisit.__contains__(cellR.get_pos())):
+                nodeToVisit.append(cellR.get_pos())
+                posToVisit.append(cellR)
 
             return None
