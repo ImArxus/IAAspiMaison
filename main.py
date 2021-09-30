@@ -22,7 +22,8 @@ robot.move_down()
 print(robot)
 #print("Dust : " + str(robot.goal()))
 print(robot.perfomance_after_action(node, "right"))
-print(robot.generate_action(True))
+robot.generate_actions(True)
+print(robot.get_actions_expected())
 
 # Analyser l'état de la pièce actuelle
 # S'il y a de la poussière > aspirer

@@ -7,7 +7,7 @@ class Robot:
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
         self.posX = posX
         self.posY = posY
-        self.actions_expected = list[str]
+        self.actions_expected: list[str] = []
         self.expected_grid = grid
         self.performance = 0
 
@@ -58,7 +58,7 @@ class Robot:
             self.posY = self.posY+1
             print("Robot has moved down")
 
-    def generate_action(self, informed_search: bool) -> None:
+    def generate_actions(self, informed_search: bool) -> None:
         nodes: Node
         if informed_search:
             nodes = self.a_star(self.expected_grid)
@@ -66,11 +66,25 @@ class Robot:
             print("Uninfomred search")  # TODO
         generated_actions: list[str] = []
         action = "start"
+        actions = self.reverse_nodes(nodes)
+        actions.reverse()
+        del actions[0]
+        action = "start"
         while action != "":
-            action = nodes.get_action()
-            generated_actions.append(action)
-            nodes.get_parent()
+            if len(actions) > 0:
+                action = actions[0]
+                generated_actions.append(action)
+                del actions[0]
+            else:
+                action = ""
         self.actions_expected = generated_actions
+
+    def reverse_nodes(self, nodes: Node) -> list[str]:
+        actions: list[str] = []
+        while(nodes.get_parent() != None):
+            actions.append(nodes.get_action())
+            nodes = nodes.get_parent()
+        return actions
 
     def a_star(self, grid: Grid) -> Node:
         node = Node(grid.get_cell(self.posX, self.posY), Node(
@@ -136,13 +150,13 @@ class Robot:
                 if robot_node.distance(cell.get_posX(), cell.get_posY()) < robot_node.distance(goal.get_posX(), goal.get_posY()):
                     goal = cell
         return goal
-    
-    def move_Robot(self,cellArrival:Cell) -> None:
-        while self.get_posX()<cellArrival.get_posX():
+
+    def move_Robot(self, cellArrival: Cell) -> None:
+        while self.get_posX() < cellArrival.get_posX():
             self.move_right()
-        while self.get_posX()>cellArrival.get_posX():
+        while self.get_posX() > cellArrival.get_posX():
             self.move_left()
-        while self.get_posY()<cellArrival.get_posY():
+        while self.get_posY() < cellArrival.get_posY():
             self.move_down()
-        while self.get_posY()>cellArrival.get_posY():
+        while self.get_posY() > cellArrival.get_posY():
             self.move_up()
