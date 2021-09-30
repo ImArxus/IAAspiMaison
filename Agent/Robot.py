@@ -2,7 +2,6 @@ from Environment.Node import Node
 from Environment.Cell import Cell
 from Environment.Grid import Grid
 
-
 class Robot:
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
         self.posX = posX
