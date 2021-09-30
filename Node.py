@@ -45,12 +45,19 @@ class Node:
 
     def set_energy_cost(self, energy_cost: int) -> None:
         self.energy_cost = energy_cost
-    
+
     def set_heuristique(self, heuristique: int) -> None:
         self.heuristique = heuristique
 
     def __str__(self) -> str:
         return "Actual cell : " + self.actual_cell.__str__()
+
+    # ----- Fonction qui indique la distance d'un noeud, dont on lui fournit les coordonnées, jusqu'à elle même -----#
+    def distance(self, node_posX: int, node_posY: int) -> int:
+        distX = self.actual_cell.get_posX() - node_posX
+        distY = self.actual_cell.get_posY() - node_posY
+        distTot = abs(distX) + abs(distY)
+        return distTot  # --- Distance en nombre de déplacement total---##
 
     def expand(self, grid: Grid, robot) -> list:
         successors: list[Node] = []
@@ -58,7 +65,7 @@ class Node:
         for action in actions:
             s = Node(self.position_after_action(action, grid), self,
                      action, self.depth+1, self.parent.get_energy_cost()+1, 0)  # Ajoute 1 de profondeur et 1 au coût énergétique global pour chaque action effectuée
-            self.affect_heuristique(robot)
+            # self.affect_heuristique(robot)
             successors.append(s)
         return successors
 

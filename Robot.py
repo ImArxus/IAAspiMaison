@@ -7,7 +7,7 @@ class Robot:
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
         self.posX = posX
         self.posY = posY
-        self.action_expected = list[str]
+        self.actions_expected = list[str]
         self.expected_grid = grid
         self.performance = 0
 
@@ -20,8 +20,8 @@ class Robot:
     def get_expected_grid(self) -> Grid:
         return self.expected_grid
 
-    def get_action_expected(self):
-        return self.action_expected
+    def get_actions_expected(self):
+        return self.actions_expected
 
     def set_posX(self, X: int) -> None:
         self.posX = X
@@ -32,8 +32,8 @@ class Robot:
     def set_cell_in_expected_grid(self, cell_posX: int, cell_posY: int, cell: Cell) -> None:
         self.expected_grid.set_cell(cell_posX, cell_posY, cell)
 
-    def set_action_expected(self, action_expected: list[str]) -> None:
-        self.action_expected = action_expected
+    def set_actions_expected(self, actions_expected: list[str]) -> None:
+        self.actions_expected = actions_expected
 
     def __str__(self) -> str:
         return "Robot is in :  {self.posX} , {self.posY}".format(self=self)
@@ -54,19 +54,37 @@ class Robot:
         if self.posY < self.expected_grid.get_rows():
             self.posY = self.posY+1
 
+    def generate_action(self, informed_search: bool) -> None:
+        nodes: Node
+        if informed_search:
+            nodes = self.a_star(self.expected_grid)
+        else:
+            print("Uninfomred search")  # TODO
+        generated_actions: list[str] = []
+        action = "start"
+        while action != "":
+            action = nodes.get_action()
+            generated_actions.append(action)
+            nodes.get_parent()
+        self.actions_expected = generated_actions
+
     def a_star(self, grid: Grid) -> Node:
-        node_start = Node(grid.get_cell(self.posX, self.posY))
-        node_start.affect_heuristique(self)
-        node_list: list[Node] = []
-        node_list.append(node_start)
-        while self.goal_reached(node_list[0]) == False:
-            node_tmp: Node = node_list[0]
-            node_list.remove(node_list[0])
-            new_nodes = node_tmp.expand(self.expected_grid, self)
+        node = Node(grid.get_cell(self.posX, self.posY), Node(
+            None, None, None, -1, 0, 0), "", 0, 0, 0)  # Noeud de départ du robot
+        # node.affect_heuristique(self)
+        nodes_list: list[Node] = []
+        nodes_list.append(node)
+        while self.goal_reached(nodes_list[0]) == False:
+            node = nodes_list[0]
+            nodes_list.remove(nodes_list[0])
+            new_nodes = node.expand(self.expected_grid, self)
             for node in new_nodes:
-                node_list.append(node)
-            node_list.sort()
-        return node_list[0]
+                nodes_list.append(node)
+            node_goal = Node(self.goal(), Node(
+                None, None, None, -1, 0, 0), "", 0, 0, 0)
+            nodes_list.sort(key=lambda x: x.get_energy_cost() + x.distance(
+                node_goal.get_actual_cell().get_posX(), node_goal.get_actual_cell().get_posY()))
+        return nodes_list[0]
 
     def perfomance_after_action(self, node: Node, action: str) -> int:
         performance = 0
@@ -83,17 +101,19 @@ class Robot:
         return performance
 
     def goal_reached(self, node: Node) -> bool:
-        energy_cost: int = 0
+        performance_after_action: int = 0
         action = node.get_action()
         while action != "":
             action = node.get_action()
-            energy_cost += self.perfomance_after_action(node, action)
+            performance_after_action += self.perfomance_after_action(
+                node, action)
             node = node.get_parent()
-        estimated_total = energy_cost + self.performance
+        estimated_total = performance_after_action + self.performance
         if estimated_total > self.performance:
             return True
         return False
 
+    # Fonction retournant la cellule la plus proche contenant de la poussière
     def goal(self) -> Cell:
         cells_with_dust: list[Cell] = []
         for i in range(self.expected_grid.get_rows()):
@@ -105,8 +125,10 @@ class Robot:
         if len(cells_with_dust) > 0:
             goal = cells_with_dust[0]
             for cell in cells_with_dust:
-                robot_position = self.expected_grid.get_cell(
+                robot_cell = self.expected_grid.get_cell(
                     self.posX, self.posY)
-                if robot_position.distance(cell.get_posX(), cell.get_posY()) < robot_position.distance(goal.get_posX(), goal.get_posY()):
+                robot_node = Node(robot_cell, Node(
+                    None, None, None, -1, 0, 0), "", 0, 0, 0)
+                if robot_node.distance(cell.get_posX(), cell.get_posY()) < robot_node.distance(goal.get_posX(), goal.get_posY()):
                     goal = cell
         return goal

@@ -38,10 +38,3 @@ class Cell:
 
     def clone(self) -> Cell:
         return Cell(self.dust, self.jewel, self.posX, self.posY)
-
-    # ----- Fonction qui indique la distance d'une cellule dont on lui fournit les coordonnées jusqu'à elle même -----#
-    def distance(self, cell_posX: int, cell_posY: int) -> int:
-        distX = self.posX - cell_posX
-        distY = self.posY - cell_posY
-        distTot = abs(distX) + abs(distY)
-        return distTot  # --- Distance en nombre de déplacement total---##
