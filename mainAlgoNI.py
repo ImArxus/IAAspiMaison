@@ -6,19 +6,18 @@ from Position import Position
 from AlgoNI import AlgoNI
 
 # Création du robot et de la grille
-grid:Grid = Grid(5,5)
-rbt:Robot = Robot(0,1,grid)
-eff:Effectors=Effectors(rbt)
-algoni:AlgoNI=AlgoNI(grid,rbt)
+grid: Grid = Grid(5, 5)
+rbt: Robot = Robot(0, 1, grid)
+algoni: AlgoNI = AlgoNI(grid, rbt)
 
-#Execution
-for i in range(1,2):
-    #Initiation du code
+# Execution
+for i in range(1, 2):
+    # Initiation du code
     nodeToVisit = []
     posToVisit = []
     nodeStudied = []
-    currentPos = Position(rbt.posX,rbt.posY)
-    finished:bool=False
+    currentPos = Position(rbt.posX, rbt.posY)
+    finished: bool = False
     nodeToVisit.append(currentPos.get_pos())
     posToVisit.append(currentPos)
     algoni.insertDustTest()
@@ -26,15 +25,16 @@ for i in range(1,2):
     algoni.insertDustTest()
     print(grid)
     print(rbt)
-    #Appel de la fonction
-    cellObtained:Cell=None
-    while ~finished & len(posToVisit)>0:
-        cellObtained=algoni.analyseGrid(posToVisit[0],nodeStudied,nodeToVisit,posToVisit)
-        if(cellObtained!=None):
-            finished=True
+    # Appel de la fonction
+    cellObtained: Cell = None
+    while ~finished & len(posToVisit) > 0:
+        cellObtained = algoni.analyseGrid(
+            posToVisit[0], nodeStudied, nodeToVisit, posToVisit)
+        if(cellObtained != None):
+            finished = True
             print("Position de la case trouvée: ")
             print(cellObtained.get_posX(), cellObtained.get_posY())
-            if(cellObtained.get_dust()==1):
+            if(cellObtained.get_dust() == 1):
                 print("Contient de la saleté")
             else:
                 print("Contient des bijoux")
@@ -42,12 +42,12 @@ for i in range(1,2):
     print("")
     print("Noeuds étudiés : ")
     print(nodeStudied)
-    #Déplacement du robot
-    if(cellObtained!=None):
-        print("")
+    # Déplacement du robot
+    if(cellObtained != None):
+        print()
         print("Déplacement robot : ")
         print(rbt)
-        rbt.calcul_Dest_To_Case(cellObtained)
+        rbt.get_sensors().calcul_dest_to_cell(cellObtained)
         print(rbt.get_actions_expected())
-        eff.action_robot(cellObtained)
+        rbt.get_effectors().action_robot(cellObtained)
         print(rbt)

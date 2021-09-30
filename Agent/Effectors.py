@@ -26,22 +26,13 @@ class Effectors:
             self.robot.set_posY(self.robot.get_posY()+1)
             print("Robot has moved down")
 
-    def move_Robot(self, cellArrival: Cell) -> None:
-        while self.robot.get_posX() < cellArrival.get_posX():
-            self.move_right()
-        while self.robot.get_posX() > cellArrival.get_posX():
-            self.move_left()
-        while self.robot.get_posY() < cellArrival.get_posY():
-            self.move_down()
-        while self.robot.get_posY() > cellArrival.get_posY():
-            self.move_up()
-
     def clean(self, cellToClean: Cell) -> None:
         cellToClean.set_dust(0)
 
     def grab(self, cellToGrab: Cell) -> None:
         cellToGrab.set_jewel(0)
 
+    # Effectue les actions contenues dans l attribut du robot
     def action_robot(self, cellArrival: Cell) -> None:
         while len(self.robot.get_actions_expected()) > 0:
             action: str = self.robot.get_actions_expected()[0]

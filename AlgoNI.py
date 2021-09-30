@@ -1,4 +1,3 @@
-from Agent.Effectors import Effectors
 from Agent.Robot import Robot
 from Environment.Grid import Grid
 from Environment.Cell import Cell

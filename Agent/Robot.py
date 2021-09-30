@@ -4,15 +4,21 @@ from Environment.Grid import Grid
 from Agent.Effectors import Effectors
 from Agent.Sensors import Sensors
 
+
 class Robot:
 
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
         self.posX = posX
         self.posY = posY
+        # Action prevues a l exécution par le robot
         self.actions_expected: list[str] = []
+        # Comment le robot voit la grille
         self.expected_grid = grid
+        # Mesure de performance des actions du robot
         self.performance = 0
+        # Actionneurs
         self.effectors = Effectors(self)
+        # Capteurs
         self.sensors = Sensors(self)
 
     def get_posX(self) -> int:
@@ -53,25 +59,3 @@ class Robot:
 
     def __str__(self) -> str:
         return "Robot is in :  {self.posX} , {self.posY}".format(self=self)
-
-    def calcul_Dest_To_Case(self, cellArrival: Cell) -> None:
-        listToReturn: list[str] = []
-        posX: int = self.get_posX()
-        posY: int = self.get_posY()
-        while posX < cellArrival.get_posX():
-            listToReturn.append('right')
-            posX += 1
-        while posX > cellArrival.get_posX():
-            listToReturn.append('left')
-            posX -= 1
-        while posY < cellArrival.get_posY():
-            listToReturn.append('down')
-            posY += 1
-        while posY > cellArrival.get_posY():
-            listToReturn.append('up')
-            posY -= 1
-        if cellArrival.get_dust() == 1:
-            listToReturn.append('clean')
-        else:
-            listToReturn.append('grab')
-        self.actions_expected = listToReturn
