@@ -19,8 +19,6 @@ grid = Grid(5, 5)
 rbt = Robot(0, 1, grid)
 
 # Fonction d'analyse de la grille
-
-
 def analyseGrid(gr: Grid, pos: Position) -> Cell:
     nodeStudied.append(pos.get_pos())
     del nodeToVisit[0]
@@ -88,5 +86,5 @@ for i in range(1, 2):
 
 rbt.calcul_Dest_To_Case(cellObtained)
 print(rbt.get_actions_expected())
-rbt.act_Robot(cellObtained)
+rbt.get_effectors().action_robot(cellObtained)
 print(rbt)

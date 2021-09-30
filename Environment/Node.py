@@ -62,9 +62,10 @@ class Node:
     def expand(self, grid: Grid, robot) -> list:
         successors: list[Node] = []
         actions = self.possible_actions(grid)
+        goal = robot.get_sensors().goal()
         for action in actions:
             s = Node(self.position_after_action(action, grid), self,
-                     action, self.depth+1, self.parent.get_energy_cost()+1, 0)  # Ajoute 1 de profondeur et 1 au coût énergétique global pour chaque action effectuée
+                     action, self.depth+1, self.parent.get_energy_cost()+1, self.distance(goal.get_posX(), goal.get_posY()))  # Ajoute 1 de profondeur et 1 au coût énergétique global pour chaque action effectuée
             # self.affect_heuristique(robot)
             successors.append(s)
         return successors
@@ -78,13 +79,13 @@ class Node:
         elif action == "up" and cell_cloned.get_posY() > 0:
             cell_cloned = grid.get_cell(
                 self.actual_cell.get_posX(), self.actual_cell.get_posY()-1).clone()
-        elif action == "down" and cell_cloned.get_posY() < grid.get_rows():
+        elif action == "down" and cell_cloned.get_posY() < grid.get_rows()-1:
             cell_cloned = grid.get_cell(
                 self.actual_cell.get_posX(), self.actual_cell.get_posY()+1).clone()
         elif action == "left" and cell_cloned.get_posX() > 0:
             cell_cloned = grid.get_cell(
                 self.actual_cell.get_posX()-1, self.actual_cell.get_posY()).clone()
-        elif action == "down" and cell_cloned.get_posX() < grid.get_cols():
+        elif action == "right" and cell_cloned.get_posX() < grid.get_cols()-1:
             cell_cloned = grid.get_cell(
                 self.actual_cell.get_posX()+1, self.actual_cell.get_posY()).clone()
         return cell_cloned

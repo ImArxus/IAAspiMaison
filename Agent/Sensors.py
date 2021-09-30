@@ -37,20 +37,16 @@ class Sensors:
 
     def a_star(self, grid: Grid) -> Node:
         node = Node(grid.get_cell(self.robot.get_posX(), self.robot.get_posY()), Node(
-            None, None, None, -1, 0, 0), "", 0, 0, 0)  # Noeud de départ du robot
-        # node.affect_heuristique(self)
+            None, None, None, -1, 0, 0), "", 0, 0, -1)  # Noeud de départ du robot
         nodes_list: list[Node] = []
         nodes_list.append(node)
         while self.goal_reached(nodes_list[0]) == False:
             node = nodes_list[0]
             nodes_list.remove(nodes_list[0])
-            new_nodes = node.expand(self.robot.get_expected_grid(), self)
-            for node in new_nodes:
-                nodes_list.append(node)
-            node_goal = Node(self.goal(), Node(
-                None, None, None, -1, 0, 0), "", 0, 0, 0)
+            new_nodes = node.expand(self.robot.get_expected_grid(), self.robot)
+            nodes_list.extend(new_nodes)
             nodes_list.sort(key=lambda x: x.get_energy_cost() + x.distance(
-                node_goal.get_actual_cell().get_posX(), node_goal.get_actual_cell().get_posY()))
+                self.goal().get_posX(), self.goal().get_posY()))
         return nodes_list[0]
 
     def perfomance_after_action(self, node: Node, action: str) -> int:
@@ -88,7 +84,7 @@ class Sensors:
                 if self.robot.get_expected_grid().get_cell(j, i).get_dust() > 0:
                     cells_with_dust.append(
                         self.robot.get_expected_grid().get_cell(j, i))
-        goal = Cell(0, 0, self.robot.get_posX(), self.robot.get_posY())
+        goal = Cell(0, 0, 0, 0)
         if len(cells_with_dust) > 0:
             goal = cells_with_dust[0]
             for cell in cells_with_dust:
