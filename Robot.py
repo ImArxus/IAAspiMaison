@@ -41,18 +41,22 @@ class Robot:
     def move_left(self) -> None:
         if self.posX > 0:
             self.posX = self.posX-1
+            print("Robot has moved left")
 
     def move_right(self) -> None:
         if self.posX < self.expected_grid.get_cols():
             self.posX = self.posX+1
+            print("Robot has moved right")
 
     def move_up(self) -> None:
         if self.posY > 0:
             self.posY = self.posY-1
+            print("Robot has moved up")
 
     def move_down(self) -> None:
         if self.posY < self.expected_grid.get_rows():
             self.posY = self.posY+1
+            print("Robot has moved down")
 
     def generate_action(self, informed_search: bool) -> None:
         nodes: Node
@@ -132,3 +136,13 @@ class Robot:
                 if robot_node.distance(cell.get_posX(), cell.get_posY()) < robot_node.distance(goal.get_posX(), goal.get_posY()):
                     goal = cell
         return goal
+    
+    def move_Robot(self,cellArrival:Cell) -> None:
+        while self.get_posX()<cellArrival.get_posX():
+            self.move_right()
+        while self.get_posX()>cellArrival.get_posX():
+            self.move_left()
+        while self.get_posY()<cellArrival.get_posY():
+            self.move_down()
+        while self.get_posY()>cellArrival.get_posY():
+            self.move_up()
