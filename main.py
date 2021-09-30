@@ -1,35 +1,39 @@
 import sys
 from tkinter import *
-#import AlgoNonInforme
+import threading
+from Thread_Environnement import *
+from Thread_Robot import *
 import Cell
 import Grid
 from random import *
-#import Node
-#import Robot
-
-
- 
 
 
 
 def main():
     manoir = Grid.Grid(5,5)
-    print(manoir)
-    for col in range(manoir.get_cols()):
-        for line in range(manoir.get_rows()):
-            piece = manoir.get_cell(col,line) 
-            n = randint(1,10)
-            if n>=5 and n<=7 :
-                piece.set_dust(1)
-            if n>=8 and n<=9 :
-                piece.set_jewel(1)
-            if  n==10 :
-                piece.set_dust(1)
-                piece.set_jewel(1)
-    print(manoir)
+
+    threads = []
+    
+    ## Creation de threads
+    thread_Manoir = Thread_Environnement(1,'environnement',manoir )
+    thread_Robot = Thread_Robot(2, "Thread-2", 2)
+
+    ## Lancement des threads
+    thread_Manoir.start()
+    thread_Robot.start()
+
+    ## Ajout des threads dans la liste
+    threads.append(thread_Manoir)
+    threads.append(thread_Robot)
 
 
 
+    
+
+    # Wait for all threads to complete
+    for t in threads:
+        t.join()
+    print( "Exiting Main Thread")
     c = 40     # Longueur d'un cote d'une piece
     n = 5      # Nombre de piece par ligne et pas colonne
     cases = [] 
@@ -56,17 +60,21 @@ def main():
         cases.append(pieces)       # Ajout de la ligne a la liste principale
 
     ##----- Modification des figures creees -----##
-    for ligne in range(n):
-        for colonne in range(n):
-            if ( (manoir.get_cell(ligne,colonne).get_dust()) == 1 and (manoir.get_cell(ligne,colonne).get_jewel()) == 1 ):     # dirt + jewel
+    for colonne in range(n):
+        for ligne in range(n):
+            if ( (manoir.get_cell(colonne,ligne).get_dust()) == 1 and (manoir.get_cell(colonne,ligne).get_jewel()) == 1 ):     # dirt + jewel
                 dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='yellow' )
-            elif ( (manoir.get_cell(ligne,colonne).get_dust()) == 1 and (manoir.get_cell(ligne,colonne).get_jewel()) == 0 ): # dirt only
+            elif ( (manoir.get_cell(colonne,ligne).get_dust()) == 1 and (manoir.get_cell(colonne,ligne).get_jewel()) == 0 ): # dirt only
                 dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='red')
-            elif ( (manoir.get_cell(ligne,colonne).get_dust()) == 0 and (manoir.get_cell(ligne,colonne).get_jewel()) == 1 ):  # jewel only
+            elif ( (manoir.get_cell(colonne,ligne).get_dust()) == 0 and (manoir.get_cell(colonne,ligne).get_jewel()) == 1 ):  # jewel only
                 dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='blue')
             else:                                                                                                              # rien
                 dessin.itemconfigure(cases[ligne][colonne], outline='black',fill='white')
     fen.mainloop() 
+
+
+
+    
 
 
 
