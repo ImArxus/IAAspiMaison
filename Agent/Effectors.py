@@ -1,5 +1,5 @@
 from Environment.Cell import Cell
-
+import time
 
 class Effectors:
 
@@ -35,7 +35,7 @@ class Effectors:
         print("Robot has grabed")
 
     # Effectue les actions contenues dans l attribut du robot
-    def action_robot(self, cellArrival: Cell) -> None:
+    def action_robot(self, cellArrival: Cell, fenetre, dessin, agent, c) -> None:
         while len(self.robot.get_actions_expected()) > 0:
             action: str = self.robot.get_actions_expected()[0]
             self.robot.get_actions_expected().remove(action)
@@ -51,3 +51,12 @@ class Effectors:
                 self.grab(cellArrival)
             else:
                 self.clean(cellArrival)
+
+            dessin.delete('agent')  # delete previous picture of robot
+            dessin.create_rectangle(agent.posY * c + 12, agent.posX * c + 12,
+                                         (agent.posY + 1) * c - 12,
+                                         (agent.posX + 1) * c - 12,
+                                         tags='agent', fill='green')  # display robot at his new pos
+            fenetre.update()
+            time.sleep(1)
+

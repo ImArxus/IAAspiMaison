@@ -43,9 +43,6 @@ class Thread_Robot(threading.Thread):
             listemp: list[Position] = algoni.get_cellToVisit()
             listemp.append(currentPos)
             algoni.set_cellToVisit(listemp)
-            algoni.insertDustTest()
-            algoni.insertDustTest()
-            algoni.insertDustTest()
             print(self.grid)
             print(self.agent)
             # Appel de la fonction
@@ -75,14 +72,7 @@ class Thread_Robot(threading.Thread):
                 print(self.agent)
                 self.agent.calcul_Dest_To_Case(cellObtained)
                 print(self.agent.get_actions_expected())
-                self.effector.action_robot(cellObtained)
-
-                self.dessin.delete('agent') #delete previous picture of robot
-                self.dessin.create_rectangle(self.agent.posY * self.c + 12, self.agent.posX * self.c + 12,
-                                             (self.agent.posY + 1) * self.c - 12,
-                                             (self.agent.posX + 1) * self.c - 12,
-                                             tags='agent', fill='green')         #display robot at his new pos
-                #self.fenetre.update()
+                self.effector.action_robot(cellObtained, self.fenetre,self.dessin,self.agent,self.c)
 
                 print(self.agent)
 
