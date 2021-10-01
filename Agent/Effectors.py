@@ -18,7 +18,7 @@ class Effectors:
 
     def move_up(self) -> None:
         if self.robot.get_posY() > 0:
-            self.robot.set_posY(self.get_posY()-1)
+            self.robot.set_posY(self.robot.get_posY()-1)
             print("Robot has moved up")
 
     def move_down(self) -> None:
@@ -33,7 +33,7 @@ class Effectors:
         cellToGrab.set_jewel(0)
 
     # Effectue les actions contenues dans l attribut du robot
-    def action_robot(self, cellArrival: Cell) -> None:
+    def action_robot(self) -> None:
         while len(self.robot.get_actions_expected()) > 0:
             action: str = self.robot.get_actions_expected()[0]
             self.robot.get_actions_expected().remove(action)
@@ -44,8 +44,8 @@ class Effectors:
             elif(action == 'down'):
                 self.move_down()
             elif(action == 'up'):
-                self.move_up
+                self.move_up()
             elif(action == 'grab'):
-                self.grab(cellArrival)
+                self.grab(self.robot.get_expected_grid().get_cell(self.robot.get_posX(), self.robot.get_posY()))
             else:
-                self.clean(cellArrival)
+                self.clean(self.robot.get_expected_grid().get_cell(self.robot.get_posX(), self.robot.get_posY()))

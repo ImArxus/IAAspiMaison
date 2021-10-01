@@ -10,10 +10,13 @@ class Robot:
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
         self.posX = posX
         self.posY = posY
+        
+        ## ETAT MENTAL
         # Action prevues a l exécution par le robot
         self.actions_expected: list[str] = []
         # Comment le robot voit la grille
         self.expected_grid = grid
+
         # Mesure de performance des actions du robot
         self.performance = 0
         # Actionneurs
