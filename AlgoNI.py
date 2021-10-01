@@ -68,4 +68,4 @@ class AlgoNI:
                 self.nodeToVisit.append(newPos.get_pos())
                 self.cellToVisit.append(newPos)
 
-            return None 
+            return None

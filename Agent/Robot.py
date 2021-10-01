@@ -2,6 +2,7 @@ from Environment.Cell import Cell
 from Environment.Grid import Grid
 from Agent.Effectors import Effectors
 from Agent.Sensors import Sensors
+import Position
 
 # Classe permettant la représentation d'un objet Robot
 class Robot:
@@ -79,3 +80,4 @@ class Robot:
         else:
             listToReturn.append('grab')
         self.actions_expected = listToReturn
+
