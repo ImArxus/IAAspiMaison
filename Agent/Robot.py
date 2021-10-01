@@ -22,6 +22,10 @@ class Robot:
         self.effectors = Effectors(self)  # Effecteurs du robot
         self.sensors = Sensors(self)  # Capteurs du robot
 
+        # Pour algo non informe
+        self.nodeStudied: list[Cell] = []  # Liste des noeuds déjà étudiés
+        self.cellToVisit: list[Cell] = []  # Liste des positions à explorer
+
     # Getters and setters
     def get_posX(self) -> int:
         return self.posX
@@ -43,6 +47,18 @@ class Robot:
 
     def get_sensors(self) -> Sensors:
         return self.sensors
+
+    def get_nodeStudied(self) -> list[Cell]:
+        return self.nodeStudied
+
+    def get_cellToVisit(self) -> list[Cell]:
+        return self.cellToVisit
+
+    def set_nodeStudied(self, nodeStudied: list[Cell]) -> None:
+        self.nodeStudied = nodeStudied
+
+    def set_cellToVisit(self, cellToVisit: list[Cell]) -> None:
+        self.cellToVisit = cellToVisit
 
     def set_posX(self, X: int) -> None:
         self.posX = X

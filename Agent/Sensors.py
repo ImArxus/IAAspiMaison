@@ -61,16 +61,16 @@ class Sensors:
                 key=lambda x: x.get_energy_cost() + x.get_heuristique())
         return nodes_list[0]
 
-    # Calcul de la performance du robot apres avoir effectue l action donnee en parametre 
+    # Calcul de la performance du robot apres avoir effectue l action donnee en parametre
     # Chaque action coute 1 de perfomance
     def perfomance_after_action(self, node: Node, action: str) -> int:
         performance = 0
         if action == "clean":
             performance -= 1
             if self.robot.get_expected_grid().get_cell(node.get_actual_cell().get_posX(), node.get_actual_cell().get_posY()).get_jewel() > 0:
-                performance -= 50 # Si on aspire un bijou => malus
+                performance -= 50  # Si on aspire un bijou => malus
             if self.robot.get_expected_grid().get_cell(node.get_actual_cell().get_posX(), node.get_actual_cell().get_posY()).get_dust() > 0:
-                performance += 25 # Si on aspire la poussiere => bonus
+                performance += 25  # Si on aspire la poussiere => bonus
         elif action == "pick up":
             performance += 9  # +10 -1 => pour avoir recupere un bijou au lieu de l aspirer
         elif action == "left" or "right" or "up" or "down":
@@ -101,7 +101,7 @@ class Sensors:
                 if self.robot.get_expected_grid().get_cell(j, i).get_dust() > 0:
                     cells_with_dust.append(
                         self.robot.get_expected_grid().get_cell(j, i))
-        goal = Cell(0, 0, 0, 0) # Cellule de base
+        goal = Cell(0, 0, 0, 0)  # Cellule de base
         # Cherche la cellule la plus proche parmi celles contenant de la poussiere
         if len(cells_with_dust) > 0:
             goal = cells_with_dust[0]
@@ -137,3 +137,47 @@ class Sensors:
         else:
             listToReturn.append('grab')
         self.actions_expected = listToReturn
+
+    # Fonction d'analyse non informee de la grille
+    def analyse_grid(self, cell: Cell) -> Cell:
+        node_studied: list[Cell] = self.robot.get_nodeStudied()
+        node_studied.append(self.robot.get_expected_grid().get_cell(cell.get_posX(), cell.get_posY()))
+        self.robot.set_nodeStudied(node_studied)
+        cell_toVisit: list[Cell] = self.robot.get_cellToVisit()
+        del cell_toVisit[0]
+        self.robot.set_cellToVisit(cell_toVisit)
+
+        if (self.robot.get_expected_grid().get_cell(cell.get_posX(), cell.get_posY()).get_dust() == 1) | (self.robot.get_expected_grid().get_cell(cell.get_posX(), cell.get_posY()).get_jewel() == 1):
+            return self.robot.get_expected_grid().get_cell(cell.get_posX(), cell.get_posY())
+        else:
+            node_studied = self.robot.get_nodeStudied()
+            cell_toVisit = self.robot.get_cellToVisit()
+            if (cell.get_posY()-1 > 0):
+                newCell = self.robot.get_expected_grid().get_cell(
+                    cell.get_posX(), cell.get_posY()-1)
+                if (~node_studied.__contains__(newCell)) & (~cell_toVisit.__contains__(newCell)):
+                    cell_toVisit.append(newCell)
+                    self.robot.set_cellToVisit(cell_toVisit)
+
+            if (cell.get_posY() < self.robot.get_expected_grid().get_rows()-1):
+                newCell = self.robot.get_expected_grid().get_cell(
+                    cell.get_posX(), cell.get_posY()+1)
+                if (~node_studied.__contains__(newCell)) & (~cell_toVisit.__contains__(newCell)):
+                    cell_toVisit.append(newCell)
+                    self.robot.set_cellToVisit(cell_toVisit)
+
+            if (cell.get_posX() > 0):
+                newCell = self.robot.get_expected_grid().get_cell(
+                    cell.get_posX()-1, cell.get_posY())
+                if (~node_studied.__contains__(newCell)) & (~cell_toVisit.__contains__(newCell)):
+                    cell_toVisit.append(newCell)
+                    self.robot.set_cellToVisit(cell_toVisit)
+
+            if (cell.get_posX() < self.robot.get_expected_grid().get_cols()-1):
+                newCell = self.robot.get_expected_grid().get_cell(
+                    cell.get_posX()+1, cell.get_posY())
+                if (~node_studied.__contains__(newCell)) & (~cell_toVisit.__contains__(newCell)):
+                    cell_toVisit.append(newCell)
+                    self.robot.set_cellToVisit(cell_toVisit)
+
+            return None

@@ -1,33 +1,38 @@
 from Agent.Robot import Robot
 from Environment.Grid import Grid
 from Environment.Cell import Cell
-from AlgoNI import AlgoNI
+import random
+
 
 # Création du robot et de la grille
 grid: Grid = Grid(5, 5)
-rbt: Robot = Robot(0, 1, grid)
+robot: Robot = Robot(0, 1, grid)
+
+
+# Insertion de poussière de manière aléatoire (test pour meziane)
+def insertDustTest() -> None:
+    rdm1: int = random.randint(0, robot.get_expected_grid().get_cols()-1)
+    rdm2: int = random.randint(0, robot.get_expected_grid().get_rows()-1)
+    dustcell: Cell = robot.get_expected_grid().get_cell(rdm1, rdm2)
+    dustcell.set_dust(1)
 
 # Execution
 for i in range(1, 2):
     # Initiation du code
-    algoni: AlgoNI = AlgoNI(grid, rbt, [], [], [])
     finished: bool = False
-    listemp: list[Cell] = algoni.get_nodeToVisit()
-    listemp.append(grid.get_cell(rbt.get_posX(), rbt.get_posY()))
-    algoni.set_nodeToVisit(listemp)
-    listemp: list[Cell] = algoni.get_cellToVisit()
-    listemp.append(grid.get_cell(rbt.get_posX(), rbt.get_posY()))
-    algoni.set_cellToVisit(listemp)
-    algoni.insertDustTest()
-    algoni.insertDustTest()
-    algoni.insertDustTest()
+    listemp: list[Cell] = robot.get_cellToVisit()
+    listemp.append(grid.get_cell(robot.get_posX(), robot.get_posY()))
+    robot.set_cellToVisit(listemp)
+    insertDustTest()
+    insertDustTest()
+    insertDustTest()
     print(grid)
-    print(rbt)
+    print(robot)
     # Appel de la fonction
     cellObtained: Cell = None
-    while ~finished & len(algoni.get_cellToVisit()) > 0:
-        listtemp: list[Cell] = algoni.get_cellToVisit()
-        cellObtained = algoni.analyseGrid(listemp[0])
+    while ~finished & len(robot.get_cellToVisit()) > 0:
+        listtemp: list[Cell] = robot.get_cellToVisit()
+        cellObtained = robot.get_sensors().analyse_grid(listemp[0])
         if(cellObtained != None):
             finished = True
             print("Position de la case trouvée: ")
@@ -39,18 +44,18 @@ for i in range(1, 2):
             break
     print("")
     print("Noeuds étudiés : ")
-    for node in algoni.get_nodeStudied():
+    for node in robot.get_nodeStudied():
         print(node)
     print("")
     print("Noeuds à étudier : ")
-    for node in algoni.get_nodeToVisit():
+    for node in robot.get_cellToVisit():
         print(node)
     # Déplacement du robot
     if(cellObtained != None):
         print("")
         print("Déplacement robot : ")
-        print(rbt)
-        rbt.calcul_Dest_To_Case(cellObtained)
-        print(rbt.get_actions_expected())
-        rbt.get_effectors().action_robot()
-        print(rbt)
+        print(robot)
+        robot.calcul_Dest_To_Case(cellObtained)
+        print(robot.get_actions_expected())
+        robot.get_effectors().action_robot()
+        print(robot)
