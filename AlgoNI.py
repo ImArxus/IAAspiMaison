@@ -12,14 +12,14 @@ class AlgoNI:
         self.nodeStudied=nodeStudied # Liste des noeuds déjà étudiés
         self.nodeToVisit=nodeToVisit # Liste des noeuds encore à étudier
         self.cellToVisit=cellToVisit # Liste des positions à explorer
-
+    
     # Getters and setters
     def get_nodeStudied(self) -> list[str]:
         return self.nodeStudied
 
     def set_nodeStudied(self, nodeStudied:list[str]) -> None:
         self.nodeStudied = nodeStudied
-
+    
     def get_nodeToVisit(self) -> list[str]:
         return self.nodeToVisit
 
@@ -68,4 +68,4 @@ class AlgoNI:
                 self.nodeToVisit.append(newPos.get_pos())
                 self.cellToVisit.append(newPos)
 
-            return None  
+            return None
