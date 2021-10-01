@@ -7,13 +7,11 @@ from Environment.Cell import Cell
 from Environment.Grid import Grid
 from random import *
 from Agent.Robot import Robot
-from Agent.Effectors import Effectors
 
 
 def main():
     manoir = Grid(5, 5)
     agent = Robot(0, 0, manoir)
-    effectors = Effectors(agent)
     update_time = 0
 
     threads = []
@@ -51,7 +49,7 @@ def main():
     thread_Manoir = Thread_Environnement(
         1, 'environnement', manoir, dessin, cases, n)
     thread_Robot = Thread_Robot(
-        2, "agent", manoir, agent, dessin, c, effectors, fen)
+        2, "agent", manoir, agent, dessin, c, fen)
 
     # Lancement des threads
     thread_Manoir.start()

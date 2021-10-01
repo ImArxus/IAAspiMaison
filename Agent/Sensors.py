@@ -9,20 +9,17 @@ class Sensors:
         self.robot = robot
 
     # Initialise les actions a effectuer par le robot en fonction de l algorithme choisi (informe ou non informe)
-    def generate_actions(self, informed_search: bool) -> None:
+    def generate_actions(self) -> None:
         nodes: Node
         generated_actions: list[str] = []
         action = "start"
-        if informed_search:
-            # Recupere le noeud avec ses parents du chemin le plus court pour aspirer la poussiere
-            nodes = self.a_star(self.robot.get_expected_grid())
-            # Inverse l ordre des actions puisque a_star renvoie d abord le noeud le plus bas
-            actions = self.actions_in_nodes(nodes)
-            actions.reverse()
-            # Supprime le premier noeud, qui possède une action vide ("")
-            del actions[0]
-        else:
-            print("Uninformed search")  # TODO
+        # Recupere le noeud avec ses parents du chemin le plus court pour aspirer la poussiere
+        nodes = self.a_star(self.robot.get_expected_grid())
+        # Inverse l ordre des actions puisque a_star renvoie d abord le noeud le plus bas
+        actions = self.actions_in_nodes(nodes)
+        actions.reverse()
+        # Supprime le premier noeud, qui possède une action vide ("")
+        del actions[0]
         # Ajoute chaque action contenue dans les noeuds à une liste
         while action != "":
             if len(actions) > 0:

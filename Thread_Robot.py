@@ -8,8 +8,10 @@ from AlgoNI import AlgoNI
 from Position import Position
 
 threadLock = threading.Lock()
+
+
 class Thread_Robot(threading.Thread):
-    def __init__(self, threadID, name, grid, agent, dessin, c, effector, fenetre):
+    def __init__(self, threadID, name, grid, agent: Robot, dessin, c, fenetre):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
@@ -17,22 +19,25 @@ class Thread_Robot(threading.Thread):
         self.dessin = dessin
         self.grid = grid
         self.c = c
-        self.effector = effector
         self.fenetre = fenetre
 
     def run(self):
-        print( "Starting" + self.name)
+        print("Starting" + self.name)
         # Get lock to synchronize threads
-        #threadLock.acquire()
+        # threadLock.acquire()
         while 1:
             self.action()
             time.sleep(1)
 
         # Free lock to release next thread
-        #threadLock.release()
+        # threadLock.release()
 
-    def action(self):
-        for i in range(1, 2):
+    def action(self, informed: bool) -> None:
+        if informed:
+            self.agent.get_sensors().generate_actions()
+            self.agent.get_effectors().action_robot(self.agent.get_sensors().goal(),
+                                                    self.fenetre, self.dessin, self.agent, self.c)
+        else:
             # Initiation du code
             algoni = AlgoNI(self.grid, self.agent, [], [], [])
             currentPos = Position(self.agent.posX, self.agent.posY)
@@ -59,11 +64,9 @@ class Thread_Robot(threading.Thread):
                     else:
                         print("Contient des bijoux")
                     break
-            print("")
-            print("Noeuds étudiés : ")
+            print("\nNoeuds étudiés : ")
             print(algoni.get_nodeStudied())
-            print("")
-            print("Noeuds à étudier : ")
+            print("\nNoeuds à étudier : ")
             print(algoni.get_nodeToVisit())
             # Déplacement du robot
             if (cellObtained != None):
@@ -72,7 +75,7 @@ class Thread_Robot(threading.Thread):
                 print(self.agent)
                 self.agent.get_sensors().calcul_destination_to_cell(cellObtained)
                 print(self.agent.get_actions_expected())
-                self.effector.action_robot(cellObtained, self.fenetre,self.dessin,self.agent,self.c)
+                self.agent.get_effectors().action_robot(
+                    cellObtained, self.fenetre, self.dessin, self.agent, self.c)
 
                 print(self.agent)
-
