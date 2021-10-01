@@ -1,73 +1,71 @@
-from Robot import Robot
-from Grid import Grid
-from Cell import Cell
+from Agent.Robot import Robot
+from Environment.Cell import Cell
 from Position import Position
+from Environment.Grid import Grid
 import random
 
-# Création du robot et de la grille
-grid = Grid(5,5)
-rbt = Robot(0,1,grid)
+class AlgoNI:
 
-#Insertion de poussière de manière aléatoire
-rdm1:int = random.randint(0,grid.get_cols()-1)
-rdm2:int = random.randint(0,grid.get_rows()-1)
-dustcell: Cell = grid.get_cell(rdm1,rdm2)
-dustcell.set_dust(1)
-print(grid)
-print(rbt)
+    def __init__(self, grid: Grid, robot:Robot, nodeStudied:list[str],nodeToVisit:list[str],cellToVisit:list[Position]) -> None:
+        self.grid = grid
+        self.robot = robot
+        self.nodeStudied=nodeStudied # Liste des noeuds déjà étudiés
+        self.nodeToVisit=nodeToVisit # Liste des noeuds encore à étudier
+        self.cellToVisit=cellToVisit # Liste des positions à explorer
+    
+    # Getters and setters
+    def get_nodeStudied(self) -> list[str]:
+        return self.nodeStudied
 
-#Initiation du code
-nodeToVisit = []
-posToVisit = []
-nodeStudied = []
-currentPos = Position(rbt.posX,rbt.posY)
-finished:bool=False
-nodeToVisit.append(currentPos.get_pos())
-posToVisit.append(currentPos)
+    def set_nodeStudied(self, nodeStudied:list[str]) -> None:
+        self.nodeStudied = nodeStudied
+    
+    def get_nodeToVisit(self) -> list[str]:
+        return self.nodeToVisit
 
-#Fonction d'analyse de la grille
-def analyseGrid(gr:Grid,pos:Position)-> Cell:
-    nodeStudied.append(pos.get_pos())
-    del nodeToVisit[0]
-    del posToVisit[0]
+    def set_nodeToVisit(self, nodeToVisit:list[str]) -> None:
+        self.nodeToVisit = nodeToVisit
 
-    if (gr.get_cell(pos.get_posX(),pos.get_posY()).get_dust() == 1)|(gr.get_cell(pos.get_posX(),pos.get_posY()).get_jewel() == 1):
-        return gr.get_cell(pos.get_posX(),pos.get_posY())
-    else:
-        newPos = Position(pos.get_posX(), pos.get_posY()-1)
-        if (pos.get_posY()>0)&(~nodeStudied.__contains__(newPos.get_pos()))&(~nodeToVisit.__contains__(newPos.get_pos())):
-            nodeToVisit.append(newPos.get_pos())
-            posToVisit.append(newPos)
+    def get_cellToVisit(self) -> list[Position]:
+        return self.cellToVisit
 
-        newPos = Position(pos.get_posX(), pos.get_posY()+1)
-        if  (pos.get_posY()<grid.get_rows()-1) &(~nodeStudied.__contains__(newPos.get_pos()))&(~nodeToVisit.__contains__(newPos.get_pos())):
-            nodeToVisit.append(newPos.get_pos())
-            posToVisit.append(newPos)
+    def set_cellToVisit(self, cellToVisit:list[Position]) -> None:
+        self.cellToVisit = cellToVisit
 
-        newPos = Position(pos.get_posX()-1, pos.get_posY())
-        if  (pos.get_posX()>0) &(~nodeStudied.__contains__(newPos.get_pos()))&(~nodeToVisit.__contains__(newPos.get_pos())):
-            nodeToVisit.append(newPos.get_pos())
-            posToVisit.append(newPos)
+    #Insertion de poussière de manière aléatoire (test pour meziane)
+    def insertDustTest(self)-> None:
+        rdm1:int = random.randint(0,self.grid.get_cols()-1)
+        rdm2:int = random.randint(0,self.grid.get_rows()-1)
+        dustcell: Cell = self.grid.get_cell(rdm1,rdm2)
+        dustcell.set_dust(1)
 
-        newPos = Position(pos.get_posX()+1, pos.get_posY())
-        if  (pos.get_posX()<grid.get_cols()-1) &(~nodeStudied.__contains__(newPos.get_pos()))&(~nodeToVisit.__contains__(newPos.get_pos())):
-            nodeToVisit.append(newPos.get_pos())
-            posToVisit.append(newPos)
-        
-        return None
+    #Fonction d'analyse de la grille
+    def analyseGrid(self,pos:Position)-> Cell:
+        self.nodeStudied.append(pos.get_pos())
+        del self.nodeToVisit[0]
+        del self.cellToVisit[0]
 
-#Appel de la fonction
-while ~finished:
-    cellObtained:Cell=analyseGrid(grid,posToVisit[0])
-    if(cellObtained!=None):
-        finished=True
-        print("Position de la case trouvée: ")
-        print(cellObtained.get_posX(), cellObtained.get_posY())
-        if(cellObtained.get_dust()==1):
-            print("Contient de la saleté")
+        if (self.grid.get_cell(pos.get_posX(),pos.get_posY()).get_dust() == 1)|(self.grid.get_cell(pos.get_posX(),pos.get_posY()).get_jewel() == 1):
+            return self.grid.get_cell(pos.get_posX(),pos.get_posY())
         else:
-            print("Contient des bijoux")
-        break
-print("")
-print("Noeuds étudiés : ")
-print(nodeStudied)
+            newPos = Position(pos.get_posX(), pos.get_posY()-1)
+            if (pos.get_posY()>0)&(~self.nodeStudied.__contains__(newPos.get_pos()))&(~self.nodeToVisit.__contains__(newPos.get_pos())):
+                self.nodeToVisit.append(newPos.get_pos())
+                self.cellToVisit.append(newPos)
+
+            newPos = Position(pos.get_posX(), pos.get_posY()+1)
+            if  (pos.get_posY()<self.grid.get_rows()-1) &(~self.nodeStudied.__contains__(newPos.get_pos()))&(~self.nodeToVisit.__contains__(newPos.get_pos())):
+                self.nodeToVisit.append(newPos.get_pos())
+                self.cellToVisit.append(newPos)
+
+            newPos = Position(pos.get_posX()-1, pos.get_posY())
+            if  (pos.get_posX()>0) &(~self.nodeStudied.__contains__(newPos.get_pos()))&(~self.nodeToVisit.__contains__(newPos.get_pos())):
+                self.nodeToVisit.append(newPos.get_pos())
+                self.cellToVisit.append(newPos)
+
+            newPos = Position(pos.get_posX()+1, pos.get_posY())
+            if  (pos.get_posX()<self.grid.get_cols()-1) &(~self.nodeStudied.__contains__(newPos.get_pos()))&(~self.nodeToVisit.__contains__(newPos.get_pos())):
+                self.nodeToVisit.append(newPos.get_pos())
+                self.cellToVisit.append(newPos)
+
+            return None 

@@ -19,4 +19,4 @@ class Position:
         self.posY = Y
 
     def __str__(self) -> str:
-        return "({self.posX}, {self.posY})".format(self=self)
+        return "({self.posX}, {self.posY})".format(self=self) 
