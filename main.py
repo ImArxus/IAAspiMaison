@@ -49,7 +49,7 @@ def main():
     #dessin.delete('agent') pour delete que l'agent
     ## Creation de threads
     thread_Manoir = Thread_Environnement(1, 'environnement', manoir, dessin, cases, n)
-    thread_Robot = Thread_Robot(2, "agent", 2, manoir, agent, dessin, c)
+    thread_Robot = Thread_Robot(2, "agent", manoir, agent, dessin, c, effectors, fen)
 
     ## Lancement des threads
     thread_Manoir.start()

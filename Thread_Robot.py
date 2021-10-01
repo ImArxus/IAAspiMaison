@@ -4,28 +4,29 @@ from random import *
 import threading
 import time
 from Agent.Robot import Robot
-import AlgoNI
-import Position
+from AlgoNI import AlgoNI
+from Position import Position
 
 threadLock = threading.Lock()
 class Thread_Robot(threading.Thread):
-    def __init__(self, threadID, name, counter, grid, agent, dessin, c):
+    def __init__(self, threadID, name, grid, agent, dessin, c, effector, fenetre):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
-        self.counter = counter
         self.agent = agent
         self.dessin = dessin
         self.grid = grid
         self.c = c
-
+        self.effector = effector
+        self.fenetre = fenetre
 
     def run(self):
         print( "Starting" + self.name)
         # Get lock to synchronize threads
         #threadLock.acquire()
         while 1:
-            self.action(self.grid, self.agent)
+            self.action()
+            time.sleep(1)
 
         # Free lock to release next thread
         #threadLock.release()
@@ -33,7 +34,7 @@ class Thread_Robot(threading.Thread):
     def action(self):
         for i in range(1, 2):
             # Initiation du code
-            algoni: AlgoNI = AlgoNI(self.grid, self.agent, [], [], [])
+            algoni = AlgoNI(self.grid, self.agent, [], [], [])
             currentPos = Position(self.agent.posX, self.agent.posY)
             finished: bool = False
             listemp: list[str] = algoni.get_nodeToVisit()
@@ -74,13 +75,14 @@ class Thread_Robot(threading.Thread):
                 print(self.agent)
                 self.agent.calcul_Dest_To_Case(cellObtained)
                 print(self.agent.get_actions_expected())
-                self.agent.action_robot(cellObtained)
+                self.effector.action_robot(cellObtained)
 
                 self.dessin.delete('agent') #delete previous picture of robot
                 self.dessin.create_rectangle(self.agent.posY * self.c + 12, self.agent.posX * self.c + 12,
                                              (self.agent.posY + 1) * self.c - 12,
                                              (self.agent.posX + 1) * self.c - 12,
                                              tags='agent', fill='green')         #display robot at his new pos
+                #self.fenetre.update()
 
                 print(self.agent)
 

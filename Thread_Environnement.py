@@ -4,7 +4,7 @@ from random import *
 import threading
 import time
 
-#threadLock = threading.Lock()
+threadLock = threading.Lock()
 
 class Thread_Environnement(threading.Thread):
     def __init__(self, threadID, name, environnement, dessin, cases, n):
@@ -15,19 +15,18 @@ class Thread_Environnement(threading.Thread):
         self.dessin = dessin
         self.cases = cases
         self.n = n
-
     def run(self):
         while (1):
             print("Starting" + self.name)
             # Get lock to synchronize threads
-            # threadLock.acquire()
+            #threadLock.acquire()
             col = randint(0,4)
             line = randint(0,4)
             piece = self.environnement.get_cell(col, line)
             rand_n = randint(0, 10)
-            if rand_n >= 3 and rand_n <= 5:
+            if rand_n >= 5 and rand_n <= 5:
                 piece.set_dust(1)
-            if rand_n >= 6 and rand_n <= 9:
+            if rand_n >= 9 and rand_n <= 9:
                 piece.set_jewel(1)
             if rand_n == 10:
                 piece.set_dust(1)
@@ -50,5 +49,5 @@ class Thread_Environnement(threading.Thread):
             # Free lock to release next thread
 
             print(self.environnement)
-            # threadLock.release()
-            time.sleep(3)
+            time.sleep(20)
+            #threadLock.release()
