@@ -8,12 +8,11 @@ threadLock = threading.Lock()
 
 
 class Thread_Environnement(threading.Thread):
-    def __init__(self, threadID, name, environnement, manoir, dessin, cases, n):
+    def __init__(self, threadID, name, environnement, dessin, cases, n):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
         self.environnement = environnement
-        self.manoir = manoir
         self.dessin = dessin
         self.cases = cases
         self.n = n
@@ -38,14 +37,14 @@ class Thread_Environnement(threading.Thread):
                     ##----- Modification des figures creees -----##
             for colonne in range(self.n):
                 for ligne in range(self.n):
-                    if ((self.manoir.get_cell(colonne, ligne).get_dust()) == 1 and (
-                            self.manoir.get_cell(colonne, ligne).get_jewel()) == 1):  # dirt + jewel
+                    if ((self.environnement.get_cell(colonne, ligne).get_dust()) == 1 and (
+                            self.environnement.get_cell(colonne, ligne).get_jewel()) == 1):  # dirt + jewel
                         self.dessin.itemconfigure(self.cases[ligne][colonne], outline='black', fill='yellow')
-                    elif ((self.manoir.get_cell(colonne, ligne).get_dust()) == 1 and (
-                            self.manoir.get_cell(colonne, ligne).get_jewel()) == 0):  # dirt only
+                    elif ((self.environnement.get_cell(colonne, ligne).get_dust()) == 1 and (
+                            self.environnement.get_cell(colonne, ligne).get_jewel()) == 0):  # dirt only
                         self.dessin.itemconfigure(self.cases[ligne][colonne], outline='black', fill='red')
-                    elif ((self.manoir.get_cell(colonne, ligne).get_dust()) == 0 and (
-                            self.manoir.get_cell(colonne, ligne).get_jewel()) == 1):  # jewel only
+                    elif ((self.environnement.get_cell(colonne, ligne).get_dust()) == 0 and (
+                            self.environnement.get_cell(colonne, ligne).get_jewel()) == 1):  # jewel only
                         self.dessin.itemconfigure(self.cases[ligne][colonne], outline='black', fill='blue')
                     else:  # rien
                         self.dessin.itemconfigure(self.cases[ligne][colonne], outline='black', fill='white')
