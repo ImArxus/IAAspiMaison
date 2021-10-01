@@ -26,7 +26,7 @@ class Thread_Robot(threading.Thread):
         # Get lock to synchronize threads
         # threadLock.acquire()
         while 1:
-            self.action()
+            self.action(False)
             time.sleep(1)
 
         # Free lock to release next thread
