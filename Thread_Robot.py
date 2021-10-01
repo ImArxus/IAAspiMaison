@@ -4,7 +4,6 @@ from random import *
 import threading
 import time
 
-
 threadLock = threading.Lock()
 class Thread_Robot(threading.Thread):
     def __init__(self, threadID, name, counter, agent, dessin):

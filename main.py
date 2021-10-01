@@ -1,10 +1,10 @@
 import sys
 from tkinter import *
-import threading
-import Thread_Environnement
-import Thread_Robot
-from Environment.Cell import *
-from Environment.Grid import *
+from threading import *
+from Thread_Environnement import Thread_Environnement
+from Thread_Robot import Thread_Robot
+from Environment.Cell import Cell
+from Environment.Grid import Grid
 from random import *
 
 
@@ -42,7 +42,7 @@ def main():
 
     agent.append(dessin.create_rectangle(colonne * c + 12, ligne * c + 12, (colonne + 1) * c - 12, (ligne + 1) * c - 12,
                             tags='agent', fill='green'))
-
+    #dessin.delete('agent') pour delete que l'agent
     ## Creation de threads
     thread_Manoir = Thread_Environnement(1, 'environnement', manoir, dessin, cases, n)
     thread_Robot = Thread_Robot(2, "agent", 2, agent, dessin)

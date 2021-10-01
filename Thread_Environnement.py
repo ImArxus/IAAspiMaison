@@ -1,5 +1,5 @@
-from Environment.Cell import *
-from Environment.Grid import *
+from Environment.Cell import Cell
+from Environment.Grid import Grid
 from random import *
 import threading
 import time
