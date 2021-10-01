@@ -70,7 +70,7 @@ class Thread_Robot(threading.Thread):
                 print("")
                 print("Déplacement robot : ")
                 print(self.agent)
-                self.agent.calcul_Dest_To_Case(cellObtained)
+                self.agent.get_sensors().calcul_destination_to_cell(cellObtained)
                 print(self.agent.get_actions_expected())
                 self.effector.action_robot(cellObtained, self.fenetre,self.dessin,self.agent,self.c)
 
