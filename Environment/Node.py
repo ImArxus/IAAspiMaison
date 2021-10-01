@@ -2,18 +2,20 @@ from __future__ import annotations
 from Environment.Cell import Cell
 from Environment.Grid import Grid
 
-
+# Classe représentant un noeud, que nous utiliserons pour nos algorithmes
 class Node:
-
+    
+    # Constructeur
     def __init__(self, actual_cell: Cell, parent: Node, action: str, depth: int, energy_cost: int, heuristique: int) -> None:
-        self.actual_cell = actual_cell
-        self.parent = parent
-        self.action = action
-        self.depth = depth
-        self.energy_cost = energy_cost
-        # Heuristique : distance par rapport a la case cible
+        self.actual_cell = actual_cell # Représentation de la cellule que va modéliser le noeud
+        self.parent = parent # Représentation du noeud parent
+        self.action = action # Représentation de l'action à effectuer
+        self.depth = depth # Représentation de la profondeur du noeud
+        self.energy_cost = energy_cost # Représentation du coût en énergie pour atteindre ce noeud
+        # Représentation de l'heuristique, à savoir la distance par rapport a la case cible
         self.heuristique = heuristique
 
+    # Getters et setters
     def get_actual_cell(self) -> Cell:
         return self.actual_cell
 
@@ -50,21 +52,22 @@ class Node:
     def set_heuristique(self, heuristique: int) -> None:
         self.heuristique = heuristique
 
+    # Fonction d'affichage du noeud, ceci en affichant la cellule contenue
     def __str__(self) -> str:
         return "Actual cell : " + self.actual_cell.__str__()
 
-    # Fonction qui indique la distance d un noeud, dont on lui fournit les coordonnees, jusqu a elle meme #
+    # Fonction qui indique la distance d'un noeud, dont on lui fournit les coordonnées, jusqu à elle même
     def distance(self, node_posX: int, node_posY: int) -> int:
         distX = self.actual_cell.get_posX() - node_posX
         distY = self.actual_cell.get_posY() - node_posY
         distTot = abs(distX) + abs(distY)
-        return distTot  # Distance en nombre de deplacements totale ##
+        return distTot  # Distance en nombre de déplacements total
 
     # Donne la liste des noeuds voisins en fonction des actions possibles
     def expand(self, grid: Grid, robot) -> list:
         successors: list[Node] = []
         actions = self.possible_actions(grid)
-        # Cellule la plus proche contenant de la poussiere pour ajouter la distance par rapport a celle ci dans l heuristique
+        # Cellule la plus proche contenant de la poussière pour ajouter la distance par rapport à celle ci dans l heuristique
         goal = robot.get_sensors().goal()
         for action in actions:
             s = Node(self.position_after_action(action, grid), self,
@@ -72,7 +75,7 @@ class Node:
             successors.append(s)
         return successors
 
-    # Donne l etat de la cellule apres avoir effectuee l action donnee en parametre
+    # Donne l'état de la cellule apres avoir effectué l'action donnée en paramètre
     def position_after_action(self, action: str, grid: Grid) -> Cell:
         cell_cloned = self.actual_cell.clone()
         if action == "grab":
@@ -93,7 +96,7 @@ class Node:
                 self.actual_cell.get_posX()+1, self.actual_cell.get_posY()).clone()
         return cell_cloned
 
-    # Donne la liste des actions possibles par rapport a la cellule actuelle
+    # Donne la liste des actions possibles par rapport à la cellule actuelle
     def possible_actions(self, grid: Grid) -> list[str]:
         actions = []
         if self.actual_cell.get_jewel() > 0:
