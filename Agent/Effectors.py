@@ -1,6 +1,5 @@
 from Environment.Cell import Cell
 
-
 class Effectors:
 
     def __init__(self, robot) -> None:
