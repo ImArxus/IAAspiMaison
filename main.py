@@ -25,7 +25,6 @@ print(robot.get_sensors().perfomance_after_action(node, "right"))
 robot.get_sensors().generate_actions(True)
 print(robot.get_actions_expected())
 robot.get_effectors().action_robot()
-print(robot.get_expected_grid().get_cell(robot.get_posX(), robot.get_posY()))
 print(grid)
 
 # Analyser l'état de la pièce actuelle
