@@ -1,15 +1,15 @@
 import sys
 from tkinter import *
 import threading
-from Thread_Environnement import *
-from Thread_Robot import *
-import Cell
-import Grid
+import Thread_Environnement
+import Thread_Robot
+from Environment.Cell import *
+from Environment.Grid import *
 from random import *
 
 
 def main():
-    manoir = Grid.Grid(5, 5)
+    manoir = Grid(5, 5)
     update_time = 0
 
     threads = []

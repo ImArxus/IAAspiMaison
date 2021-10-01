@@ -1,11 +1,10 @@
-import Cell
-import Grid
+from Environment.Cell import *
+from Environment.Grid import *
 from random import *
 import threading
 import time
 
-threadLock = threading.Lock()
-
+#threadLock = threading.Lock()
 
 class Thread_Environnement(threading.Thread):
     def __init__(self, threadID, name, environnement, dessin, cases, n):
