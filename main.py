@@ -1,9 +1,7 @@
-import sys
 from tkinter import *
 from threading import *
 from Thread_Environnement import Thread_Environnement
 from Thread_Robot import Thread_Robot
-from Environment.Cell import Cell
 from Environment.Grid import Grid
 from random import *
 from Agent.Robot import Robot
@@ -12,7 +10,6 @@ from Agent.Robot import Robot
 def main():
     manoir = Grid(5, 5)
     agent = Robot(0, 0, manoir)
-    update_time = 0
 
     threads = []
 
