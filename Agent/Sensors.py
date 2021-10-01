@@ -22,7 +22,7 @@ class Sensors:
             # Supprime le premier noeud, qui possède une action vide ("")
             del actions[0]
         else:
-            print("Uninfomred search")  # TODO
+            print("Uninformed search")  # TODO
         # Ajoute chaque action contenue dans les noeuds à une liste
         while action != "":
             if len(actions) > 0:
@@ -114,30 +114,6 @@ class Sensors:
                     goal = cell
         return goal
 
-    # Calcul de la distance par rapport a la cellule d arrivee pour l algo non informe
-    # Retourne la liste des actions a effectuer pour atteindre la cellule d arrivee
-    def calcul_dest_to_cell(self, cellArrival: Cell) -> None:
-        listToReturn: list[str] = []
-        posX: int = self.robot.get_posX()
-        posY: int = self.robot.get_posY()
-        while posX < cellArrival.get_posX():
-            listToReturn.append('right')
-            posX += 1
-        while posX > cellArrival.get_posX():
-            listToReturn.append('left')
-            posX -= 1
-        while posY < cellArrival.get_posY():
-            listToReturn.append('down')
-            posY += 1
-        while posY > cellArrival.get_posY():
-            listToReturn.append('up')
-            posY -= 1
-        if cellArrival.get_dust() == 1:
-            listToReturn.append('clean')
-        else:
-            listToReturn.append('grab')
-        self.actions_expected = listToReturn
-
     def contains(self, list: list[Cell], cell: Cell) -> bool:
         for cell_containing in list:
             if (cell_containing.get_posX() == cell.get_posX()) & (cell_containing.get_posY() == cell.get_posY()):
@@ -189,7 +165,8 @@ class Sensors:
 
             return None
 
-        # Fonction permettant de lister les étapes que devra accomplir le robot afin d'atteindre son but
+    # Calcul de la distance par rapport a la cellule d arrivee pour l algo non informe
+    # Retourne la liste des actions a effectuer pour atteindre la cellule d arrivee
     def calcul_destination_to_cell(self, cellArrival: Cell) -> None:
         listToReturn: list[str] = []
         posX: int = self.robot.get_posX()

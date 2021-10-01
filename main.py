@@ -1,37 +1,69 @@
-from Agent.Robot import Robot
-from Environment.Node import Node
-from Environment.Grid import Grid
+import sys
+from tkinter import *
+from threading import *
+from Thread_Environnement import Thread_Environnement
+from Thread_Robot import Thread_Robot
 from Environment.Cell import Cell
+from Environment.Grid import Grid
+from random import *
+from Agent.Robot import Robot
+from Agent.Effectors import Effectors
 
-grid = Grid(5, 5)
-cell1 = Cell(0, 0, 0, 2)
-cell2 = Cell(0, 0, 4, 0)
-cell3 = Cell(1, 0, 2, 0)
-grid.set_cell(cell1.get_posX(), cell1.get_posY(), cell1)
-grid.set_cell(cell2.get_posX(), cell2.get_posY(), cell2)
-grid.set_cell(cell3.get_posX(), cell3.get_posY(), cell3)
-#grid.get_cell(cell1.get_posX(), cell1.get_posY()).set_dust(0)
-grid.get_cell(cell2.get_posX(), cell2.get_posY()).set_jewel(1)
-node = Node(cell1, None, None, 0, 0, 0)
-robot = Robot(0, 0, grid)
-print(robot)
-print(grid)
-robot.effectors.move_left()
-robot.effectors.move_up()
-robot.effectors.move_down()
-print(robot)
-#print("Dust : " + str(robot.goal()))
-print(robot.get_sensors().perfomance_after_action(node, "right"))
-robot.get_sensors().generate_actions(True)
-print(robot.get_actions_expected())
-robot.get_effectors().action_robot()
-print(grid)
 
-# Analyser l'état de la pièce actuelle
-# S'il y a de la poussière > aspirer
-# S'il y a un bijou > le ramasser
-# Sinon récursivité :
-# Chercher les pièces juxtaposées jamais explorées et en créer des noeuds à ajouter à l'arbre et au stockage
-# Répéter jusqu'à trouver une pièce sale puis retourner l'arbre créé
-# En utilisant l'arbre déplacer le robot puis aspirer ou ramasser
-# Répéter
+def main():
+    manoir = Grid(5, 5)
+    agent = Robot(0, 1, manoir)
+    effectors = Effectors(agent)
+    update_time = 0
+
+    threads = []
+
+    c = 40  # Longueur d'un cote d'une piece
+    n = 5  # Nombre de piece par ligne et pas colonne
+    cases = []
+    robot = []
+
+    ##----- Creation de la fenetre -----##
+    fen = Tk()
+    fen.title('IAAspiMaison')
+
+    ##----- Creation des boutons -----##
+    bouton_quitter = Button(fen, text='Quitter', command=fen.destroy)
+    bouton_quitter.grid(row=1, column=1, sticky=W + E, padx=3, pady=3)
+
+    ##----- Creation des canevas -----##
+    dessin = Canvas(fen, width=n * c + 2, height=n * c + 2)
+    dessin.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
+
+    ##----- Creation des figures -----##
+    for ligne in range(n):  # Les cases de chaque ligne seront stockees dans "pieces"
+        pieces = []
+        for colonne in range(n):  # Conception des pieces d'une ligne
+            id = ligne * 5 + colonne
+            pieces.append(
+                dessin.create_rectangle(colonne * c, ligne * c, (colonne + 1) * c, (ligne + 1) * c, tags=f'{id}'))
+        cases.append(pieces)  # Ajout de la ligne a la liste principale
+
+    dessin.create_rectangle(colonne * c + 12, ligne * c + 12, (colonne + 1) * c - 12, (ligne + 1) * c - 12,
+                            tags='agent', fill='green')
+    # dessin.delete('agent') pour delete que l'agent
+    # Creation de threads
+    thread_Manoir = Thread_Environnement(
+        1, 'environnement', manoir, dessin, cases, n)
+    thread_Robot = Thread_Robot(
+        2, "agent", manoir, agent, dessin, c, effectors, fen)
+
+    # Lancement des threads
+    thread_Manoir.start()
+    thread_Robot.start()
+
+    # Ajout des threads dans la liste
+    threads.append(thread_Manoir)
+    threads.append(thread_Robot)
+
+    # Wait for all threads to complete
+    # for t in threads:
+    # t.join()
+    ##print( "Exiting Main Thread")
+
+    fen.mainloop()
