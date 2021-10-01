@@ -24,9 +24,9 @@ class Thread_Environnement(threading.Thread):
             line = randint(0,4)
             piece = self.environnement.get_cell(col, line)
             rand_n = randint(0, 10)
-            if rand_n >= 6 and rand_n <= 7:
+            if rand_n >= 4 and rand_n <= 6:
                 piece.set_dust(1)
-            if rand_n >= 8 and rand_n <= 9:
+            if rand_n >= 7 and rand_n <= 9:
                 piece.set_jewel(1)
             if rand_n == 10:
                 piece.set_dust(1)
@@ -37,17 +37,17 @@ class Thread_Environnement(threading.Thread):
                 for ligne in range(self.n):
                     if ((self.environnement.get_cell(colonne, ligne).get_dust()) == 1 and (
                             self.environnement.get_cell(colonne, ligne).get_jewel()) == 1):  # dirt + jewel
-                        self.dessin.itemconfigure(self.cases[ligne][colonne], outline='black', fill='yellow')
+                        self.dessin.itemconfigure(self.cases[colonne][ligne], outline='black', fill='yellow')
                     elif ((self.environnement.get_cell(colonne, ligne).get_dust()) == 1 and (
                             self.environnement.get_cell(colonne, ligne).get_jewel()) == 0):  # dirt only
-                        self.dessin.itemconfigure(self.cases[ligne][colonne], outline='black', fill='red')
+                        self.dessin.itemconfigure(self.cases[colonne][ligne], outline='black', fill='red')
                     elif ((self.environnement.get_cell(colonne, ligne).get_dust()) == 0 and (
                             self.environnement.get_cell(colonne, ligne).get_jewel()) == 1):  # jewel only
-                        self.dessin.itemconfigure(self.cases[ligne][colonne], outline='black', fill='blue')
+                        self.dessin.itemconfigure(self.cases[colonne][ligne], outline='black', fill='blue')
                     else:  # rien
-                        self.dessin.itemconfigure(self.cases[ligne][colonne], outline='black', fill='white')
+                        self.dessin.itemconfigure(self.cases[colonne][ligne], outline='black', fill='white')
             # Free lock to release next thread
 
             print(self.environnement)
-            time.sleep(20)
+            time.sleep(2)
             #threadLock.release()
