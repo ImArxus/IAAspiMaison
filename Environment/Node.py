@@ -75,7 +75,7 @@ class Node:
     # Donne l etat de la cellule apres avoir effectuee l action donnee en parametre
     def position_after_action(self, action: str, grid: Grid) -> Cell:
         cell_cloned = self.actual_cell.clone()
-        if action == "pick up":
+        if action == "grab":
             cell_cloned.set_jewel(0)
         elif action == "clean":
             cell_cloned.set_dust(0)
@@ -99,7 +99,7 @@ class Node:
         if self.actual_cell.get_dust() > 0:
             actions.append("clean")
         if self.actual_cell.get_jewel() > 0:
-            actions.append("pick up")
+            actions.append("grab")
         if self.actual_cell.get_posX() < grid.get_cols():
             actions.append("right")
         if self.actual_cell.get_posX() > 0:

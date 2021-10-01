@@ -35,17 +35,16 @@ class Thread_Robot(threading.Thread):
     def action(self, informed: bool) -> None:
         if informed:
             self.agent.get_sensors().generate_actions()
-            self.agent.get_effectors().action_robot(self.agent.get_sensors().goal(),
-                                                    self.fenetre, self.dessin, self.agent, self.c)
+            self.agent.get_effectors().action_robot(self.fenetre, self.dessin, self.c)
         else:
             # Initiation du code
             algoni = AlgoNI(self.grid, self.agent, [], [], [])
             currentPos = Position(self.agent.posX, self.agent.posY)
             finished: bool = False
-            listemp: list[str] = algoni.get_nodeToVisit()
+            listemp: list = algoni.get_nodeToVisit()
             listemp.append(currentPos.get_pos())
             algoni.set_nodeToVisit(listemp)
-            listemp: list[Position] = algoni.get_cellToVisit()
+            listemp = algoni.get_cellToVisit()
             listemp.append(currentPos)
             algoni.set_cellToVisit(listemp)
             print(self.grid)
@@ -53,7 +52,6 @@ class Thread_Robot(threading.Thread):
             # Appel de la fonction
             cellObtained: Cell = None
             while ~finished & len(algoni.get_cellToVisit()) > 0:
-                listtemp: list[Position] = algoni.get_cellToVisit()
                 cellObtained = algoni.analyseGrid(listemp[0])
                 if (cellObtained != None):
                     finished = True
@@ -75,7 +73,6 @@ class Thread_Robot(threading.Thread):
                 print(self.agent)
                 self.agent.get_sensors().calcul_destination_to_cell(cellObtained)
                 print(self.agent.get_actions_expected())
-                self.agent.get_effectors().action_robot(
-                    cellObtained, self.fenetre, self.dessin, self.agent, self.c)
+                self.agent.get_effectors().action_robot(self.fenetre, self.dessin, self.c)
 
                 print(self.agent)

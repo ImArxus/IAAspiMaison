@@ -60,15 +60,15 @@ class Sensors:
 
     # Calcul de la performance du robot apres avoir effectue l action donnee en parametre
     # Chaque action coute 1 de perfomance
-    def perfomance_after_action(self, node: Node, action: str) -> int:
+    def perfomance_after_action(self, cell: Cell, action: str) -> int:
         performance = 0
         if action == "clean":
             performance -= 1
-            if self.robot.get_expected_grid().get_cell(node.get_actual_cell().get_posX(), node.get_actual_cell().get_posY()).get_jewel() > 0:
+            if self.robot.get_expected_grid().get_cell(cell.get_actual_cell().get_posX(), cell.get_actual_cell().get_posY()).get_jewel() > 0:
                 performance -= 50  # Si on aspire un bijou => malus
-            if self.robot.get_expected_grid().get_cell(node.get_actual_cell().get_posX(), node.get_actual_cell().get_posY()).get_dust() > 0:
+            if self.robot.get_expected_grid().get_cell(cell.get_actual_cell().get_posX(), cell.get_actual_cell().get_posY()).get_dust() > 0:
                 performance += 25  # Si on aspire la poussiere => bonus
-        elif action == "pick up":
+        elif action == "grab":
             performance += 9  # +10 -1 => pour avoir recupere un bijou au lieu de l aspirer
         elif action == "left" or "right" or "up" or "down":
             performance -= 1
@@ -82,7 +82,7 @@ class Sensors:
         while action != "":
             action = node.get_action()
             performance_after_action += self.perfomance_after_action(
-                node, action)
+                node.get_actual_cell(), action)
             node = node.get_parent()
         estimated_total = performance_after_action + self.robot.get_performance()
         if estimated_total > self.robot.get_performance():
