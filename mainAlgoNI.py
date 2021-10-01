@@ -9,18 +9,19 @@ from AlgoNI import AlgoNI
 grid:Grid = Grid(5,5)
 rbt:Robot = Robot(0,1,grid)
 eff:Effectors=Effectors(rbt)
-algoni:AlgoNI=AlgoNI(grid,rbt)
 
 #Execution
 for i in range(1,2):
     #Initiation du code
-    nodeToVisit = []
-    posToVisit = []
-    nodeStudied = []
+    algoni:AlgoNI=AlgoNI(grid,rbt,[],[],[])
     currentPos = Position(rbt.posX,rbt.posY)
     finished:bool=False
-    nodeToVisit.append(currentPos.get_pos())
-    posToVisit.append(currentPos)
+    listemp:list[str]=algoni.get_nodeToVisit()
+    listemp.append(currentPos.get_pos())
+    algoni.set_nodeToVisit(listemp)
+    listemp:list[Position]=algoni.get_cellToVisit()
+    listemp.append(currentPos)
+    algoni.set_cellToVisit(listemp)
     algoni.insertDustTest()
     algoni.insertDustTest()
     algoni.insertDustTest()
@@ -28,8 +29,9 @@ for i in range(1,2):
     print(rbt)
     #Appel de la fonction
     cellObtained:Cell=None
-    while ~finished & len(posToVisit)>0:
-        cellObtained=algoni.analyseGrid(posToVisit[0],nodeStudied,nodeToVisit,posToVisit)
+    while ~finished & len(algoni.get_cellToVisit())>0:
+        listtemp:list[Position]=algoni.get_cellToVisit()
+        cellObtained=algoni.analyseGrid(listemp[0])
         if(cellObtained!=None):
             finished=True
             print("Position de la case trouvée: ")
@@ -41,10 +43,10 @@ for i in range(1,2):
             break
     print("")
     print("Noeuds étudiés : ")
-    print(nodeStudied)
+    print(algoni.get_nodeStudied())
     print("")
     print("Noeuds à étudier : ")
-    print(nodeToVisit)
+    print(algoni.get_nodeToVisit())
     #Déplacement du robot
     if(cellObtained!=None):
         print("")
