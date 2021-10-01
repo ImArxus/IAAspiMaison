@@ -5,8 +5,8 @@ import random
 
 
 # Création du robot et de la grille
-grid: Grid = Grid(5, 5)
-robot: Robot = Robot(0, 1, grid)
+grid: Grid = Grid(2, 2)
+robot: Robot = Robot(0, 0, grid)
 
 
 # Insertion de poussière de manière aléatoire (test pour meziane)
@@ -16,6 +16,7 @@ def insertDustTest() -> None:
     dustcell: Cell = robot.get_expected_grid().get_cell(rdm1, rdm2)
     dustcell.set_dust(1)
 
+
 # Execution
 for i in range(1, 2):
     # Initiation du code
@@ -23,9 +24,9 @@ for i in range(1, 2):
     listemp: list[Cell] = robot.get_cellToVisit()
     listemp.append(grid.get_cell(robot.get_posX(), robot.get_posY()))
     robot.set_cellToVisit(listemp)
-    insertDustTest()
-    insertDustTest()
-    insertDustTest()
+    # insertDustTest()
+    # insertDustTest()
+    # insertDustTest()
     print(grid)
     print(robot)
     # Appel de la fonction
@@ -33,7 +34,7 @@ for i in range(1, 2):
     while ~finished & len(robot.get_cellToVisit()) > 0:
         listtemp: list[Cell] = robot.get_cellToVisit()
         cellObtained = robot.get_sensors().analyse_grid(listemp[0])
-        if(cellObtained != None):
+        if cellObtained != None:
             finished = True
             print("Position de la case trouvée: ")
             print(cellObtained.get_posX(), cellObtained.get_posY())
@@ -55,7 +56,7 @@ for i in range(1, 2):
         print("")
         print("Déplacement robot : ")
         print(robot)
-        robot.calcul_Dest_To_Case(cellObtained)
+        robot.get_sensors().calcul_destination_to_cell(cellObtained)
         print(robot.get_actions_expected())
         robot.get_effectors().action_robot()
         print(robot)

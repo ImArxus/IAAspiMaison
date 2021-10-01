@@ -78,26 +78,3 @@ class Robot:
     # Fonction permettant d'afficher la position actuelle du robot sur la grille
     def __str__(self) -> str:
         return "Robot is in :  {self.posX} , {self.posY}".format(self=self)
-
-    # Fonction permettant de lister les étapes que devra accomplir le robot afin d'atteindre son but
-    def calcul_Dest_To_Case(self, cellArrival: Cell) -> None:
-        listToReturn: list[str] = []
-        posX: int = self.get_posX()
-        posY: int = self.get_posY()
-        while posX < cellArrival.get_posX():
-            listToReturn.append('right')
-            posX += 1
-        while posX > cellArrival.get_posX():
-            listToReturn.append('left')
-            posX -= 1
-        while posY < cellArrival.get_posY():
-            listToReturn.append('down')
-            posY += 1
-        while posY > cellArrival.get_posY():
-            listToReturn.append('up')
-            posY -= 1
-        if cellArrival.get_dust() == 1:
-            listToReturn.append('clean')
-        else:
-            listToReturn.append('grab')
-        self.actions_expected = listToReturn

@@ -138,10 +138,17 @@ class Sensors:
             listToReturn.append('grab')
         self.actions_expected = listToReturn
 
+    def contains(self, list: list[Cell], cell: Cell) -> bool:
+        for cell_containing in list:
+            if (cell_containing.get_posX() == cell.get_posX()) & (cell_containing.get_posY() == cell.get_posY()):
+                return True
+        return False
+
     # Fonction d'analyse non informee de la grille
     def analyse_grid(self, cell: Cell) -> Cell:
         node_studied: list[Cell] = self.robot.get_nodeStudied()
-        node_studied.append(self.robot.get_expected_grid().get_cell(cell.get_posX(), cell.get_posY()))
+        node_studied.append(self.robot.get_expected_grid().get_cell(
+            cell.get_posX(), cell.get_posY()))
         self.robot.set_nodeStudied(node_studied)
         cell_toVisit: list[Cell] = self.robot.get_cellToVisit()
         del cell_toVisit[0]
@@ -155,29 +162,52 @@ class Sensors:
             if (cell.get_posY()-1 > 0):
                 newCell = self.robot.get_expected_grid().get_cell(
                     cell.get_posX(), cell.get_posY()-1)
-                if (~node_studied.__contains__(newCell)) & (~cell_toVisit.__contains__(newCell)):
+                if (~self.contains(node_studied, newCell)) & (~self.contains(cell_toVisit, newCell)):
                     cell_toVisit.append(newCell)
                     self.robot.set_cellToVisit(cell_toVisit)
 
             if (cell.get_posY() < self.robot.get_expected_grid().get_rows()-1):
                 newCell = self.robot.get_expected_grid().get_cell(
                     cell.get_posX(), cell.get_posY()+1)
-                if (~node_studied.__contains__(newCell)) & (~cell_toVisit.__contains__(newCell)):
+                if (~self.contains(node_studied, newCell)) & (~self.contains(cell_toVisit, newCell)):
                     cell_toVisit.append(newCell)
                     self.robot.set_cellToVisit(cell_toVisit)
 
             if (cell.get_posX() > 0):
                 newCell = self.robot.get_expected_grid().get_cell(
                     cell.get_posX()-1, cell.get_posY())
-                if (~node_studied.__contains__(newCell)) & (~cell_toVisit.__contains__(newCell)):
+                if (~self.contains(node_studied, newCell)) & (~self.contains(cell_toVisit, newCell)):
                     cell_toVisit.append(newCell)
                     self.robot.set_cellToVisit(cell_toVisit)
 
             if (cell.get_posX() < self.robot.get_expected_grid().get_cols()-1):
                 newCell = self.robot.get_expected_grid().get_cell(
                     cell.get_posX()+1, cell.get_posY())
-                if (~node_studied.__contains__(newCell)) & (~cell_toVisit.__contains__(newCell)):
+                if (~self.contains(node_studied, newCell)) & (~self.contains(cell_toVisit, newCell)):
                     cell_toVisit.append(newCell)
                     self.robot.set_cellToVisit(cell_toVisit)
 
             return None
+
+        # Fonction permettant de lister les étapes que devra accomplir le robot afin d'atteindre son but
+    def calcul_destination_to_cell(self, cellArrival: Cell) -> None:
+        listToReturn: list[str] = []
+        posX: int = self.robot.get_posX()
+        posY: int = self.robot.get_posY()
+        while posX < cellArrival.get_posX():
+            listToReturn.append('right')
+            posX += 1
+        while posX > cellArrival.get_posX():
+            listToReturn.append('left')
+            posX -= 1
+        while posY < cellArrival.get_posY():
+            listToReturn.append('down')
+            posY += 1
+        while posY > cellArrival.get_posY():
+            listToReturn.append('up')
+            posY -= 1
+        if cellArrival.get_dust() == 1:
+            listToReturn.append('clean')
+        else:
+            listToReturn.append('grab')
+        self.actions_expected = listToReturn
