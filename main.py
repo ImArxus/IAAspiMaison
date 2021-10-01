@@ -12,7 +12,7 @@ from Agent.Effectors import Effectors
 
 def main():
     manoir = Grid(5, 5)
-    agent = Robot(0, 1, manoir)
+    agent = Robot(0, 0, manoir)
     effectors = Effectors(agent)
     update_time = 0
 
@@ -44,7 +44,7 @@ def main():
                 dessin.create_rectangle(colonne * c, ligne * c, (colonne + 1) * c, (ligne + 1) * c, tags=f'{id}'))
         cases.append(pieces)  # Ajout de la ligne a la liste principale
 
-    dessin.create_rectangle(colonne * c + 12, ligne * c + 12, (colonne + 1) * c - 12, (ligne + 1) * c - 12,
+    dessin.create_rectangle(12, 12, c - 12, c - 12,
                             tags='agent', fill='green')
     # dessin.delete('agent') pour delete que l'agent
     # Creation de threads
