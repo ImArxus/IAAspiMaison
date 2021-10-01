@@ -23,17 +23,17 @@ class Thread_Environnement(threading.Thread):
             print("Starting" + self.name)
             # Get lock to synchronize threads
             # threadLock.acquire()
-            for col in range(self.environnement.get_cols()):
-                for line in range(self.environnement.get_rows()):
-                    piece = self.environnement.get_cell(col, line)
-                    rand_n = randint(1, 10)
-                    if rand_n >= 5 and rand_n <= 7:
-                        piece.set_dust(1)
-                    if rand_n >= 8 and rand_n <= 9:
-                        piece.set_jewel(1)
-                    if rand_n == 10:
-                        piece.set_dust(1)
-                        piece.set_jewel(1)
+            col = randint(0,4)
+            line = randint(0,4)
+            piece = self.environnement.get_cell(col, line)
+            rand_n = randint(0, 10)
+            if rand_n >= 3 and rand_n <= 5:
+                piece.set_dust(1)
+            if rand_n >= 6 and rand_n <= 9:
+                piece.set_jewel(1)
+            if rand_n == 10:
+                piece.set_dust(1)
+                piece.set_jewel(1)
 
                     ##----- Modification des figures creees -----##
             for colonne in range(self.n):
@@ -53,4 +53,4 @@ class Thread_Environnement(threading.Thread):
 
             print(self.environnement)
             # threadLock.release()
-            time.sleep(2)
+            time.sleep(3)
