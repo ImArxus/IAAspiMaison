@@ -193,7 +193,9 @@ class Sensors:
     def calcul_destination_to_cell(self, cellArrival: Cell) -> None:
         listToReturn: list[str] = []
         posX: int = self.robot.get_posX()
+        print(posX)
         posY: int = self.robot.get_posY()
+        print(posY)
         while posX < cellArrival.get_posX():
             listToReturn.append('right')
             posX += 1
@@ -210,4 +212,4 @@ class Sensors:
             listToReturn.append('clean')
         else:
             listToReturn.append('grab')
-        self.actions_expected = listToReturn
+        self.robot.set_actions_expected(listToReturn)
