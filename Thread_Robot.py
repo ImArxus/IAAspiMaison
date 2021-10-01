@@ -22,11 +22,10 @@ class Thread_Robot(threading.Thread):
         self.fenetre = fenetre
 
     def run(self):
-        print("Starting" + self.name)
         # Get lock to synchronize threads
         # threadLock.acquire()
         while 1:
-            self.action(True)
+            self.action(False)
             time.sleep(1)
 
         # Free lock to release next thread
@@ -47,32 +46,20 @@ class Thread_Robot(threading.Thread):
             listemp = algoni.get_cellToVisit()
             listemp.append(currentPos)
             algoni.set_cellToVisit(listemp)
-            print(self.grid)
-            print(self.agent)
             # Appel de la fonction
             cellObtained: Cell = None
             while ~finished & len(algoni.get_cellToVisit()) > 0:
                 cellObtained = algoni.analyseGrid(listemp[0])
                 if (cellObtained != None):
                     finished = True
-                    print("Position de la case trouvée: ")
-                    print(cellObtained.get_posX(), cellObtained.get_posY())
                     if (cellObtained.get_dust() == 1):
                         print("Contient de la saleté")
                     else:
                         print("Contient des bijoux")
                     break
-            print("\nNoeuds étudiés : ")
-            print(algoni.get_nodeStudied())
-            print("\nNoeuds à étudier : ")
-            print(algoni.get_nodeToVisit())
             # Déplacement du robot
             if (cellObtained != None):
-                print("")
-                print("Déplacement robot : ")
-                print(self.agent)
-                self.agent.get_sensors().calcul_destination_to_cell(cellObtained)
-                print(self.agent.get_actions_expected())
-                self.agent.get_effectors().action_robot(self.fenetre, self.dessin, self.c)
 
-                print(self.agent)
+                self.agent.get_sensors().calcul_destination_to_cell(cellObtained)
+
+                self.agent.get_effectors().action_robot(self.fenetre, self.dessin, self.c)

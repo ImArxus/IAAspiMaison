@@ -17,7 +17,6 @@ class Thread_Environnement(threading.Thread):
         self.n = n
     def run(self):
         while (1):
-            print("Starting" + self.name)
             # Get lock to synchronize threads
             #threadLock.acquire()
             col = randint(0,4)
@@ -48,6 +47,5 @@ class Thread_Environnement(threading.Thread):
                         self.dessin.itemconfigure(self.cases[colonne][ligne], outline='black', fill='white')
             # Free lock to release next thread
 
-            print(self.environnement)
             time.sleep(2)
             #threadLock.release()

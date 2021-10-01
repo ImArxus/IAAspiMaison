@@ -96,10 +96,11 @@ class Node:
     # Donne la liste des actions possibles par rapport a la cellule actuelle
     def possible_actions(self, grid: Grid) -> list[str]:
         actions = []
-        if self.actual_cell.get_dust() > 0:
-            actions.append("clean")
         if self.actual_cell.get_jewel() > 0:
             actions.append("grab")
+            actions.append("grab")
+        if self.actual_cell.get_dust() > 0:
+            actions.append("clean")
         if self.actual_cell.get_posX() < grid.get_cols():
             actions.append("right")
         if self.actual_cell.get_posX() > 0:

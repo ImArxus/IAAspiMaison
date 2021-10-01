@@ -55,8 +55,7 @@ class Effectors:
             elif action == 'clean' or robot_cell.get_dust() > 0:
                 self.clean(robot_cell)
 
-            self.robot.set_performance(self.robot.get_performance(
-            )-self.robot.get_sensors().perfperfomance_after_action(robot_cell, action))
+            self.robot.set_performance(self.robot.get_performance()+self.robot.get_sensors().perfomance_after_action(robot_cell, action))
             print("Performance : " + str(self.robot.get_performance()))
 
             dessin.delete('agent')  # delete previous picture of robot

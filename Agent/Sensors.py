@@ -63,11 +63,9 @@ class Sensors:
     def perfomance_after_action(self, cell: Cell, action: str) -> int:
         performance = 0
         if action == "clean":
-            performance -= 1
-            if self.robot.get_expected_grid().get_cell(cell.get_actual_cell().get_posX(), cell.get_actual_cell().get_posY()).get_jewel() > 0:
+            performance += 24
+            if self.robot.get_expected_grid().get_cell(cell.get_posX(), cell.get_posY()).get_jewel() > 0:
                 performance -= 50  # Si on aspire un bijou => malus
-            if self.robot.get_expected_grid().get_cell(cell.get_actual_cell().get_posX(), cell.get_actual_cell().get_posY()).get_dust() > 0:
-                performance += 25  # Si on aspire la poussiere => bonus
         elif action == "grab":
             performance += 9  # +10 -1 => pour avoir recupere un bijou au lieu de l aspirer
         elif action == "left" or "right" or "up" or "down":
@@ -167,9 +165,7 @@ class Sensors:
     def calcul_destination_to_cell(self, cellArrival: Cell) -> None:
         listToReturn: list[str] = []
         posX: int = self.robot.get_posX()
-        print(posX)
         posY: int = self.robot.get_posY()
-        print(posY)
         while posX < cellArrival.get_posX():
             listToReturn.append('right')
             posX += 1
