@@ -28,9 +28,11 @@ class Effectors:
 
     def clean(self, cellToClean: Cell) -> None:
         cellToClean.set_dust(0)
+        print("Robot has cleaned")
 
     def grab(self, cellToGrab: Cell) -> None:
         cellToGrab.set_jewel(0)
+        print("Robot has grabed")
 
     # Effectue les actions contenues dans l attribut du robot
     def action_robot(self) -> None:

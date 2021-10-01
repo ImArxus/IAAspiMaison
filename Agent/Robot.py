@@ -1,29 +1,28 @@
-from Environment.Node import Node
 from Environment.Cell import Cell
 from Environment.Grid import Grid
 from Agent.Effectors import Effectors
 from Agent.Sensors import Sensors
 
+# Classe permettant la représentation d'un objet Robot
+
 
 class Robot:
 
+    # Constructeur du Robot
     def __init__(self, posX: int, posY: int, grid: Grid) -> None:
-        self.posX = posX
-        self.posY = posY
-        
-        ## ETAT MENTAL
-        # Action prevues a l exécution par le robot
+        self.posX = posX  # Position horizontale du robot
+        self.posY = posY  # Position verticale du robot
+
+        # ETAT MENTAL
+        # Liste des actions que le robot devra effectuer pour atteindre son but
         self.actions_expected: list[str] = []
-        # Comment le robot voit la grille
-        self.expected_grid = grid
+        self.expected_grid = grid  # Grille exploitée par le robot
 
-        # Mesure de performance des actions du robot
-        self.performance = 0
-        # Actionneurs
-        self.effectors = Effectors(self)
-        # Capteurs
-        self.sensors = Sensors(self)
+        self.performance = 0  # Compteur de performances du robot
+        self.effectors = Effectors(self)  # Effecteurs du robot
+        self.sensors = Sensors(self)  # Capteurs du robot
 
+    # Getters and setters
     def get_posX(self) -> int:
         return self.posX
 
@@ -60,5 +59,29 @@ class Robot:
     def set_performance(self, performance: int) -> None:
         self.performance = performance
 
+    # Fonction permettant d'afficher la position actuelle du robot sur la grille
     def __str__(self) -> str:
         return "Robot is in :  {self.posX} , {self.posY}".format(self=self)
+
+    # Fonction permettant de lister les étapes que devra accomplir le robot afin d'atteindre son but
+    def calcul_Dest_To_Case(self, cellArrival: Cell) -> None:
+        listToReturn: list[str] = []
+        posX: int = self.get_posX()
+        posY: int = self.get_posY()
+        while posX < cellArrival.get_posX():
+            listToReturn.append('right')
+            posX += 1
+        while posX > cellArrival.get_posX():
+            listToReturn.append('left')
+            posX -= 1
+        while posY < cellArrival.get_posY():
+            listToReturn.append('down')
+            posY += 1
+        while posY > cellArrival.get_posY():
+            listToReturn.append('up')
+            posY -= 1
+        if cellArrival.get_dust() == 1:
+            listToReturn.append('clean')
+        else:
+            listToReturn.append('grab')
+        self.actions_expected = listToReturn
