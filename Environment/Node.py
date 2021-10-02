@@ -64,7 +64,7 @@ class Node:
         return distTot  # Distance en nombre de déplacements total
 
     # Donne la liste des noeuds voisins en fonction des actions possibles
-    def expand(self, grid: Grid, robot) -> list:
+    def expand(self, grid: Grid, robot) -> list[Node]:
         successors: list[Node] = []
         actions = self.possible_actions(grid)
         # Cellule la plus proche contenant de la poussière pour ajouter la distance par rapport à celle ci dans l heuristique
